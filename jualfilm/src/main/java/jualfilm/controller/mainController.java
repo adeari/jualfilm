@@ -15,6 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class mainController {
     @RequestMapping(value="/", method = RequestMethod.GET)
     public String index() {              
-        return "redirect:/pelanggan";
+        return "redirect:/supplier";
     }
 }

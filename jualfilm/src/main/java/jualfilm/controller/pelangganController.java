@@ -5,8 +5,9 @@
 package jualfilm.controller;
 
 
-import bengkelin.databaseModel.hibernateUtil;
+
 import javax.servlet.http.HttpServletRequest;
+import modelDatabase.hibernateUtil;
 import modelDatabase.pelanggan;
 
 import org.springframework.stereotype.Controller;

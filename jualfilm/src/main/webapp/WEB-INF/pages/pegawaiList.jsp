@@ -9,10 +9,10 @@
 <!DOCTYPE html>
 <div class="row">
 	<div class="col-xs-8">
-		<h1>Pelanggan</h1>
+		<h1>Pegawai</h1>
 	</div>
 	<div class="col-xs-4 text-right">
-		<a href="${baseURL}pelanggan/add" class="btn btn-success">Tambah Baru</a>
+		<a href="${baseURL}pegawai/add" class="btn btn-success">Tambah Baru</a>
 	</div>
 </div>
 
@@ -26,11 +26,13 @@
 				<col width="100" />
 				<col width="100" />
 				<col width="100" />
+                                <col width="100" />
 			</colgroup>
 			<thead>
 				<tr>
-					<th>Nomor Pelanggan</th>
+					<th>ID Pegawai</th>
 					<th>Nama</th>
+                                        <th>Divisi</th>
 					<th>Alamat</th>
 					<th>Telp</th>
 					<th>Email</th>
@@ -41,14 +43,15 @@
                             
                         <c:forEach items="${dataList}" var="data1">
                             <tr>
-                                <td><c:out value="${data1.kode_pelanggan}"/></td>
-                                <td><c:out value="${data1.nama_pelanggan}"/></td>
-                                <td><c:out value="${data1.alamat_pelanggan}"/></td>
-                                <td><c:out value="${data1.telepon_pelanggan}"/></td>
-                                <td><c:out value="${data1.email_pelanggan}"/></td>
+                                <td><c:out value="${data1.id_pegawai}"/></td>
+                                <td><c:out value="${data1.nama_pegawai}"/></td>
+                                <td><c:out value="${data1.divisi}"/></td>
+                                <td><c:out value="${data1.alamat_pegawai}"/></td>
+                                <td><c:out value="${data1.telepon_pegawai}"/></td>
+                                <td><c:out value="${data1.email_pegawai}"/></td>
                                 <td>
-                                    <button type="button" class="btn btn-warning btedit" data-kode="${data1.kode_pelanggan}">Edit</button>
-                                    <button type="button" class="btn btn-danger btdelete" data-kode="${data1.kode_pelanggan}">Delete</button>
+                                    <button type="button" class="btn btn-warning btedit" data-kode="${data1.id_pegawai}">Edit</button>
+                                    <button type="button" class="btn btn-danger btdelete" data-kode="${data1.id_pegawai}">Delete</button>
                                 </td>
                             </tr>                    
                         </c:forEach>
@@ -61,12 +64,12 @@
 $( document ).ready(function() {
     $('.btedit').click(function() {
         kode = $(this).data('kode');
-        document.location = '${baseURL}pelanggan/edit?kode='+kode;
+        document.location = '${baseURL}pegawai/edit?kode='+kode;
     });
     $('.btdelete').click(function() {
         kode = $(this).data('kode');
-        if (confirm('Apakah kode pelanggan '+kode+' mau di hapus ?')) {
-            document.location = '${baseURL}pelanggan/delete?kode='+kode;
+        if (confirm('Apakah ID pegawai '+kode+' mau di hapus ?')) {
+            document.location = '${baseURL}pegawai/delete?kode='+kode;
         }
     });
 });

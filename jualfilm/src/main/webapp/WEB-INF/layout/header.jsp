@@ -58,8 +58,10 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Input <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="${baseURL}pelanggan">Input Pelanggan</a></li>
-								<li><a href="#">Input Supplier</a></li>
+								<li><a href="${baseURL}pelanggan">Pelanggan</a></li>
+								<li><a href="${baseURL}supplier">Supplier</a></li>
+                                                                <li><a href="${baseURL}pegawai">Pegawai</a></li>
+                                                                <li><a href="${baseURL}barang">Barang</a></li>
 							</ul>
 						</li>
 						<li class="dropdown">

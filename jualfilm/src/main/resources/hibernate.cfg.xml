@@ -13,6 +13,9 @@
     
     
     <mapping class="modelDatabase.pelanggan"/>
+    <mapping class="modelDatabase.supplier"/>
+    <mapping class="modelDatabase.pegawai"/>
+    <mapping class="modelDatabase.barang"/>
     
   </session-factory>
 </hibernate-configuration>
