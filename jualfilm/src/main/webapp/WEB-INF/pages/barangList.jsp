@@ -42,7 +42,7 @@
                                 <td><c:out value="${data1.kode_barang}"/></td>
                                 <td><c:out value="${data1.nama_barang}"/></td>
                                 <td align="right" class="numberfilter"><c:out value="${data1.harga}"/></td>
-                                <td align="right" class="numberfilter"><c:out value="${data1.jumlah_stock}"/></td>
+                                <td align="right" class="numberfilter"><c:out value="${data1.jumlah_stok}"/></td>
                                 <td>
                                     <button type="button" class="btn btn-warning btedit" data-kode="${data1.kode_barang}">Edit</button>
                                     <button type="button" class="btn btn-danger btdelete" data-kode="${data1.kode_barang}">Delete</button>

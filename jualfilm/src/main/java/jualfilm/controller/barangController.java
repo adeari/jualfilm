@@ -64,11 +64,11 @@ public class barangController {
         String kodebarang = request.getParameter("kode_barang");
         String nama = request.getParameter("nama");
         String harga = request.getParameter("harga");
-        String jumlah_barang = request.getParameter("jumlah_barang");
-        if (jumlah_barang.length()<1) {
-            jumlah_barang = "0";
+        String jumlah_stok = request.getParameter("jumlah_stok");
+        if (jumlah_stok.length()<1) {
+            jumlah_stok = "0";
         } else {
-            jumlah_barang = jumlah_barang.replace(".", "");
+            jumlah_stok = jumlah_stok.replace(".", "");
         }
         if (harga.length()<1) {
             harga = "0";
@@ -83,7 +83,7 @@ public class barangController {
         barang1.setKode_barang(kodebarang);
         barang1.setNama_barang(nama);
         barang1.setHarga(Long.valueOf(harga));
-        barang1.setJumlah_stock(Long.valueOf(jumlah_barang));
+        barang1.setJumlah_stok(Long.valueOf(jumlah_stok));
         
         session.save(barang1);
         trx.commit();
@@ -147,11 +147,11 @@ public class barangController {
         String kodebarang1 = request.getParameter("kode_barang1");
         String nama = request.getParameter("nama");
         String harga = request.getParameter("harga");
-        String jumlah_barang = request.getParameter("jumlah_barang");
-        if (jumlah_barang.length()<1) {
-            jumlah_barang = "0";
+        String jumlah_stok = request.getParameter("jumlah_stok");
+        if (jumlah_stok.length()<1) {
+            jumlah_stok = "0";
         } else {
-            jumlah_barang = jumlah_barang.replace(".", "");
+            jumlah_stok = jumlah_stok.replace(".", "");
         }
         if (harga.length()<1) {
             harga = "0";
@@ -169,7 +169,7 @@ public class barangController {
                         
             barang1.setNama_barang(nama);
             barang1.setHarga(Long.valueOf(harga));
-            barang1.setJumlah_stock(Long.valueOf(jumlah_barang));
+            barang1.setJumlah_stok(Long.valueOf(jumlah_stok));
             
             session.update(barang1);
             

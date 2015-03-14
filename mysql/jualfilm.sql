@@ -24,13 +24,13 @@ CREATE TABLE `barang` (
   `kode_barang` varchar(20) NOT NULL,
   `nama_barang` varchar(200) NOT NULL,
   `harga` bigint(20) NOT NULL,
-  `jumlah_stock` bigint(20) NOT NULL,
+  `jumlah_stok` bigint(20) NOT NULL,
   PRIMARY KEY (`kode_barang`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `barang` */
 
-insert  into `barang`(`kode_barang`,`nama_barang`,`harga`,`jumlah_stock`) values ('br-01','milban',2,4),('ob-34','Kursi',12345678,4500020);
+insert  into `barang`(`kode_barang`,`nama_barang`,`harga`,`jumlah_stok`) values ('br-01','milban',2,4),('ob-34','Kursi',12345678,4500020);
 
 /*Table structure for table `pegawai` */
 

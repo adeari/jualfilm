@@ -25,8 +25,8 @@ public class barang {
     @Column(name = "harga")
     private Long harga;
     
-    @Column(name = "jumlah_stock")
-    private Long jumlah_stock;
+    @Column(name = "jumlah_stok")
+    private Long jumlah_stok;
 
     public Long getHarga() {
         return harga;
@@ -53,13 +53,12 @@ public class barang {
         this.nama_barang = nama_barang;
     }
 
-    public Long getJumlah_stock() {
-        return jumlah_stock;
+    public Long getJumlah_stok() {
+        return jumlah_stok;
     }
 
-    public void setJumlah_stock(Long jumlah_stock) {
-        this.jumlah_stock = jumlah_stock;
+    public void setJumlah_stok(Long jumlah_stok) {
+        this.jumlah_stok = jumlah_stok;
     }
-    
    
 }

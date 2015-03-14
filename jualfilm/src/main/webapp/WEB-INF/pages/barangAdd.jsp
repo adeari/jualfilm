@@ -36,9 +36,9 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="telp" class="col-xs-2 control-label">Jumlah Barang</label>
+				<label for="telp" class="col-xs-2 control-label">Jumlah Stok</label>
 				<div class="col-xs-10">
-					<input type="text" class="form-control numberfilter"  style="text-align: right" id="telp" name="jumlah_barang" placeholder="jumlah_barang"<c:if test="${!empty dataEdit}"> value="${dataEdit.jumlah_stock}"</c:if>>
+					<input type="text" class="form-control numberfilter"  style="text-align: right" id="telp" name="jumlah_stok" placeholder="jumlah_stok"<c:if test="${!empty dataEdit}"> value="${dataEdit.jumlah_stok}"</c:if>>
 				</div>
 			</div>
 			<div class="form-group">
