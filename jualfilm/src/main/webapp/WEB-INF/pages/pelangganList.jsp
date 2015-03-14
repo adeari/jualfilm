@@ -60,5 +60,16 @@
 </div>
 <%@include file="/WEB-INF/layout/footer.jsp" %>
 <script>
-
+$( document ).ready(function() {
+    $('.btedit').click(function() {
+        kode = $(this).data('kode');
+        document.location = '${baseURL}pelanggan/edit?kode='+kode;
+    });
+    $('.btdelete').click(function() {
+        kode = $(this).data('kode');
+        if (confirm('Apakah kode pelanggan '+kode+' mau di hapus ?')) {
+            document.location = '${baseURL}pelanggan/delete?kode='+kode;
+        }
+    });
+});
 </script>

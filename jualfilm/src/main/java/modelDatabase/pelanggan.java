@@ -21,7 +21,7 @@ public class pelanggan {
     
     @Column(name = "nama_pelanggan", length = 200)
     private String nama_pelanggan;
-        
+            
     @Column(name = "alamat_pelanggan", length = 200)
     private String alamat_pelanggan;
     
@@ -70,6 +70,5 @@ public class pelanggan {
     public void setTelepon_pelanggan(String telepon_pelanggan) {
         this.telepon_pelanggan = telepon_pelanggan;
     }
-    
-    
+   
 }
