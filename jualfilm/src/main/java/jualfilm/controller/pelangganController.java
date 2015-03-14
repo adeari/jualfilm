@@ -54,7 +54,8 @@ public class pelangganController {
     }
     
     @RequestMapping(value="pelanggan/add", method = RequestMethod.GET)
-    public String dataAdd(ModelMap model) {        
+    public String dataAdd(ModelMap model) {  
+        model.addAttribute("headerapps", "Pelanggan Baru");        
         return "pelangganAdd";
     }
     
@@ -127,6 +128,7 @@ public class pelangganController {
             returndata = "pelangganAdd";
         }
         session.close();
+        model.addAttribute("headerapps", "Edit Pelanggan");
         return returndata;
     }
     

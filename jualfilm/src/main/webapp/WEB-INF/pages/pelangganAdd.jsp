@@ -8,7 +8,7 @@
 <%@include file="/WEB-INF/layout/header.jsp" %>
 <div class="row">
 	<div class="col-xs-12">
-		<h1>Pelanggan Baru</h1>
+		<h1>${headerapps}</h1>
 	</div>
 </div>
 
