@@ -73,7 +73,7 @@ $( document ).ready(function() {
         if (cansaved) {
             
             $.post('${baseURL}barang/validation', thisform.serialize(),function(data){
-                var jobj = jQuery.parseJSON( data );
+                var jobj = data;
                 if (jobj.cansaved == 1) {
                     thisform.unbind();
                     thisform.submit();

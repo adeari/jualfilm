@@ -11,11 +11,14 @@
     <property name="show_sql">true</property>
     
     
-    
     <mapping class="modelDatabase.pelanggan"/>
     <mapping class="modelDatabase.supplier"/>
     <mapping class="modelDatabase.pegawai"/>
     <mapping class="modelDatabase.barang"/>
+    <mapping class="modelDatabase.barang"/>
     
+    
+    <mapping class="modelDatabase.purchase_order"/>
+    <mapping class="modelDatabase.detail_purchase_order"/>
   </session-factory>
 </hibernate-configuration>

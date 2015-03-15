@@ -8,6 +8,7 @@ package jualfilm.controller;
 import modelDatabase.hibernateUtil;
 import javax.servlet.http.HttpServletRequest;
 import modelDatabase.barang;
+import modelDatabase.purchase_order;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -29,17 +30,17 @@ import org.json.JSONObject;
  * @author ade
  */
 @Controller
-public class barangController {
-    @RequestMapping(value="barang", method = RequestMethod.GET)
+public class purchaseOrderController {
+    @RequestMapping(value="purchase-order", method = RequestMethod.GET)
     public String dataList(ModelMap model) {      
         Session session = hibernateUtil.getSessionFactory().openSession();
-        Criteria criteria = session.createCriteria(barang.class);
+        Criteria criteria = session.createCriteria(purchase_order.class);
         model.addAttribute("dataList", criteria.list());
         session.close();
-        return "barangList";
+        return "purchaseOrderList";
     }
     
-    @RequestMapping(value="barang/delete", method = RequestMethod.GET)
+    @RequestMapping(value="purchase-order/delete", method = RequestMethod.GET)
     public String dataAdd(ModelMap model, HttpServletRequest request) {
         String kodebarang = request.getParameter("kode");
         Session session = hibernateUtil.getSessionFactory().openSession();
@@ -50,16 +51,16 @@ public class barangController {
         session.delete(barang1);
         trx.commit();
         session.close();
-        return "redirect:/barang";
+        return "redirect:/purchase-order";
     }
     
-    @RequestMapping(value="barang/add", method = RequestMethod.GET)
+    @RequestMapping(value="purchase-order/add", method = RequestMethod.GET)
     public String dataAdd(ModelMap model) {  
-        model.addAttribute("headerapps", "Barang Baru");        
-        return "barangAdd";
+        model.addAttribute("headerapps", "Nota Pesan Baru");        
+        return "purchaseOrderAdd";
     }
     
-    @RequestMapping(value="barang/add", method = RequestMethod.POST)
+    @RequestMapping(value="purchase-order/add", method = RequestMethod.POST)
     public String DOdataAdd(ModelMap model, HttpServletRequest request ) {
         String kodebarang = request.getParameter("kode_barang");
         String nama = request.getParameter("nama");
@@ -89,23 +90,23 @@ public class barangController {
         trx.commit();
         session.close();
         
-        return "redirect:/barang";
+        return "redirect:/purchase-order";
     }
     
     
-    @RequestMapping(value="barang/validation", produces = "application/json; charset=utf-8", method = RequestMethod.POST)
+    @RequestMapping(value="purchase-order/validation", produces = "application/json; charset=utf-8", method = RequestMethod.POST)
     @ResponseBody
     public String ValidationdataAdd(ModelMap model, HttpServletRequest request ) {
         String msg = "";
         int cansaved = 1;
         JSONObject jobj = new JSONObject();
-        String kodebarang = request.getParameter("kode_barang");
+        String kodebarang = request.getParameter("nomor_barang");
         
         
         Session session = hibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(barang.class).setProjection(Projections.rowCount());
-        if ( request.getParameter("kode_barang1") != null ) {
-            criteria.add(Restrictions.ne("kode_barang", request.getParameter("kode_barang1").toString() ));
+        if ( request.getParameter("nomor_barang1") != null ) {
+            criteria.add(Restrictions.ne("kode_barang", request.getParameter("nomor_barang1").toString() ));
         }
         criteria.add(Restrictions.eq("kode_barang", kodebarang ));
         
@@ -123,9 +124,9 @@ public class barangController {
         return jobj.toString();
     }
     
-    @RequestMapping(value="barang/edit", method = RequestMethod.GET)
+    @RequestMapping(value="purchase-order/edit", method = RequestMethod.GET)
     public String dataEdit(ModelMap model, HttpServletRequest request ) {
-        String returndata = "redirect:/barang";
+        String returndata = "redirect:/purchase-order";
         String kodebarang = request.getParameter("kode");
         Session session = hibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(barang.class);
@@ -133,16 +134,16 @@ public class barangController {
         if (criteria.uniqueResult() != null) {
             barang barang1 = (barang) criteria.uniqueResult();
             model.addAttribute("dataEdit", barang1);
-            returndata = "barangAdd";
+            returndata = "purchaseOrderAdd";
         }
         session.close();
-        model.addAttribute("headerapps", "Edit barang");
+        model.addAttribute("headerapps", "Edit Nota Pesan");
         return returndata;
     }
     
-    @RequestMapping(value="barang/edit", method = RequestMethod.POST)
+    @RequestMapping(value="purchase-order/edit", method = RequestMethod.POST)
     public String DOdataEdit(ModelMap model, HttpServletRequest request ) {        
-        String returndata = "redirect:/barang";
+        String returndata = "redirect:/purchase-order";
         String kodebarang = request.getParameter("kode_barang");
         String kodebarang1 = request.getParameter("kode_barang1");
         String nama = request.getParameter("nama");

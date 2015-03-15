@@ -87,7 +87,7 @@ public class pegawaiController {
     }
     
     
-    @RequestMapping(value="pegawai/validation", method = RequestMethod.POST)
+    @RequestMapping(value="pegawai/validation", produces = "application/json; charset=utf-8", method = RequestMethod.POST)
     @ResponseBody
     public String ValidationdataAdd(ModelMap model, HttpServletRequest request ) {
         String msg = "";

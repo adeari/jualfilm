@@ -20,6 +20,13 @@
 		<!-- Bootstrap core CSS -->
 		<link href="${baseURL}resources/css/bootstrap.min.css" rel="stylesheet">
 		<link href="${baseURL}resources/css/jquery-ui.min.css" rel="stylesheet">
+                
+                <link href="${baseURL}resources/autocomplete/css/textext.core.css" rel="stylesheet">
+                <link href="${baseURL}resources/autocomplete/css/textext.plugin.tags.css" rel="stylesheet">
+                <link href="${baseURL}resources/autocomplete/css/textext.plugin.autocomplete.css" rel="stylesheet">
+                <link href="${baseURL}resources/autocomplete/css/textext.plugin.focus.css" rel="stylesheet">
+                <link href="${baseURL}resources/autocomplete/css/textext.plugin.prompt.css" rel="stylesheet">
+                <link href="${baseURL}resources/autocomplete/css/textext.plugin.arrow.css" rel="stylesheet">
 
 		<!-- Custom styles for this template -->
 		<link href="${baseURL}resources/css/non-responsive.css" rel="stylesheet">
@@ -37,6 +44,16 @@
 		<script src="${baseURL}resources/js/jquery.min.js"></script>
 		<script src="${baseURL}resources/js/jquery-ui.min.js"></script>
 		<script src="${baseURL}resources/js/bootstrap.min.js"></script>
+                
+                <script src="${baseURL}resources/autocomplete/js/textext.core.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${baseURL}resources/autocomplete/js/textext.plugin.tags.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${baseURL}resources/autocomplete/js/textext.plugin.autocomplete.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${baseURL}resources/autocomplete/js/textext.plugin.suggestions.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${baseURL}resources/autocomplete/js/textext.plugin.filter.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${baseURL}resources/autocomplete/js/textext.plugin.focus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${baseURL}resources/autocomplete/js/textext.plugin.prompt.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${baseURL}resources/autocomplete/js/textext.plugin.ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${baseURL}resources/autocomplete/js/textext.plugin.arrow.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 
 	<body>
@@ -67,7 +84,7 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Penjualan <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="#">Nota Pesan</a></li>
+								<li><a href="${baseURL}purchase-order">Nota Pesan</a></li>
 								<li><a href="#">Nota Jual</a></li>
 								<li><a href="#">Surat Jalan</a></li>
 							</ul>
@@ -75,7 +92,7 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Pembelian <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="#">Nota Beli</a></li>
+								<li><a href="${baseURL}purchase-order">Nota Beli</a></li>
 								<li><a href="#">Surat Terima</a></li>
 							</ul>
 						</li>

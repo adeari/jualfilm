@@ -1,0 +1,258 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@include file="/konfig/konfig.jsp" %>
+<%-- 
+    Document   : barangTambah
+    Created on : Mar 14, 2015, 3:34:56 PM
+    Author     : ade
+--%>
+<%@include file="/WEB-INF/layout/header.jsp" %>
+<div class="row">
+	<div class="col-xs-12">
+		<h1>${headerapps}</h1>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+            <form class="form-horizontal" method="post">
+                <div class="form-group" id="msg" style="background-color:yellow;text-align:center;display:none"></div>
+			<div class="form-group">
+				<label for="no_po" class="col-xs-2 control-label">Nomer PO</label>
+				<div class="col-xs-10">
+                                    <input type="text" class="form-control" name="no_po" id="no_po" placeholder="Kode barang"<c:if test="${!empty dataEdit}"> value="${dataEdit.no_po}"</c:if>>
+                                    <c:if test="${!empty dataEdit}"><input type="hidden" name="no_po1" value="${dataEdit.no_po}"></c:if>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="nama" class="col-xs-2 control-label">Tanggal</label>
+				<div class="col-xs-10">
+					<p><input type="text" class="form-control" id="tanggal" name="tanggal" style="width:130px" placeholder="Tanggal"<c:if test="${!empty dataEdit}"> value="${dataEdit.tanggal}"</c:if>></p>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="alamat" class="col-xs-2 control-label">Supplier</label>
+				<div class="col-xs-10">
+                                    <textarea id="supplier" name="supplier" rows="1"></textarea>
+				</div>
+			</div>
+                        <div class="form-group">
+				<label for="alamat" class="col-xs-2 control-label">Pegawai</label>
+				<div class="col-xs-10">
+                                    <textarea id="pegawai" name="pegawai" rows="1"></textarea>
+				</div>
+			</div>
+<br/><br/>
+                                
+ <div class="row">
+	<div class="col-xs-12">
+		<table class="table">
+			<colgroup>
+				<col width="100" />
+				<col width="100" />
+				<col width="100" />
+				<col width="50" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th>Kode Barang</th>
+					<th>Nama Barang</th>
+					<th style="text-align: right;">Jumlah</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><textarea class="kodebarang" name="kodebarang" rows="1"></textarea></td>
+					<td><textarea class="namabarang" name="namabarang" rows="1"></textarea></td>
+					<td><input type="text" class="form-control numberfilter" name="jumlah" style="text-align: right;"/></td>
+					<td><button type="button" class="btn btn-danger">Delete</button></td>
+				</tr>
+                          </tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<br/><br/>
+			<div class="form-group">
+				<div class="col-xs-offset-2 col-xs-10">
+					<button type="submit" class="btn btn-success">Submit</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<%@include file="/WEB-INF/layout/footer.jsp" %>
+<script>
+    
+function refreshautocompletebarang(isbeginner) {
+    if (isbeginner) {
+        $('.kodebarang').unbind();
+        $('.namabarang').unbind();
+    }
+    $('.kodebarang')
+        .textext({
+            plugins : 'prompt autocomplete ajax',
+            prompt  : 'Kode Barang',
+            ajax : {
+                url : '${baseURL}barang.json',
+                dataType : 'json'                
+            },
+ext: {
+    core: {
+        trigger: function()
+        {
+            console.log('looo '+arguments[0]);
+            if (arguments[0]=='setInputData') {
+                if (arguments[1].length>0) {
+                    if (arguments[1].substr(0,1) == '(') {
+                        strdata = arguments[1].substr(1);
+                        posisitutupkurung = 0;
+                        lengthstr = strdata.length;
+                        i = 0;
+                        ketemu = false;
+                        while (!ketemu && i<lengthstr) {
+                            str1kata = strdata.substr(i,1);
+                            if (str1kata == ')') {
+                                ketemu = true;
+                            } else {
+                                i++;
+                            }
+                        }
+                        kodee = strdata.substr(0,i);
+                        
+                        parentelement = this.input().parent().parent().parent().parent().parent();
+                        parentelement.children().children().eq(1).find('textarea.namabarang').val(strdata.substr(i+2));
+                        parentelement.children().children().eq(1).find('.text-prompt').remove();
+                        parentelement.children().children().eq(1).find('input[name="namabarang"]').val(strdata.substr(i+2));
+                                               
+                        parentelement.children().children().eq(0).find('input[name="kodebarang"]').val(kodee);
+                        
+                    }
+                }
+            }
+            if (arguments[0]=='hideDropdown') {
+                parentelement = this.input().parent().parent().parent().parent().parent();
+                valueeee = parentelement.children().children().eq(0).find('input[name="kodebarang"]').val();
+                if (valueeee.length>0) {
+                    parentelement.children().children().eq(0).find('textarea.kodebarang').val(valueeee);
+                }
+            }
+            $.fn.textext.TextExt.prototype.trigger.apply(this, arguments);
+        }
+    }
+}
+        })
+        ;
+   $('.namabarang')
+        .textext({
+            plugins : 'prompt autocomplete ajax',
+            prompt  : 'Nama Barang',
+            ajax : {
+                url : '${baseURL}barang.json',
+                dataType : 'json'                
+            }
+        });
+}
+$( document ).ready(function() {
+    $('.form-horizontal').submit(function(e) {
+        e.preventDefault();
+        var thisform = $(this);
+        cansaved = true;
+        msg = "";
+        elemtt = $('#no_po');
+        if (cansaved && elemtt.val().length < 1){
+            cansaved = false;
+            msg = "Isi Nomor PO";
+            elemtt.focus();
+        }
+        elemtt = $('#tanggal');
+        if (cansaved && elemtt.val().length < 1){
+            cansaved = false;
+            msg = "Isi Tanggal";
+            elemtt.focus();
+        }
+        elemtt = $('#supplier');
+        if (cansaved && elemtt.val().length < 1){
+            cansaved = false;
+            msg = "Isi supplier";
+            elemtt.focus();
+        }
+        elemtt = $('#pegawai');
+        if (cansaved && elemtt.val().length < 1){
+            cansaved = false;
+            msg = "Isi Pegawai";
+            elemtt.focus();
+        }
+        
+        if (cansaved) {
+            
+            $.post('${baseURL}barang/validation', thisform.serialize(),function(data){
+                var jobj = jQuery.parseJSON( data );
+                if (jobj.cansaved == 1) {
+                    thisform.unbind();
+                    thisform.submit();
+                } else {
+                    $('#msg').text(jobj.msg);
+                    $('#msg').css('display','block');
+                }
+            });
+        } else {
+            $('#msg').text(msg);
+            $('#msg').css('display','block');
+        }
+    });
+    function addCommas( sValue ) 
+    {
+        if (sValue.length > 0 ) {
+        sValue = sValue.replace(/[#.]/g,'');
+        sValue = sValue.replace(/[^0-9\.]/g,'');
+        sValue1 = parseFloat(sValue);
+        sValue = sValue1.toString();
+            var sRegExp = new RegExp('(-?[0-9]+)([0-9]{3})');
+
+            while(sRegExp.test(sValue)) {
+                sValue = sValue.replace(sRegExp, '$1.$2');
+            }
+        }
+        return sValue;
+    }
+    $('.numberfilter').keydown(function(e) {
+    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+            (e.keyCode == 65 && e.ctrlKey === true) || 
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+                 return;
+        }
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    }).keyup(function(event) {
+        $(this).val(addCommas($(this).val()));
+    });
+    $( "#tanggal" ).datepicker({
+     beforeShow: function(input, inst)
+       {
+          inst.dpDiv.css({marginTop: input.offsetHeight+190 + 'px', marginLeft: '0px'});
+       },       
+    dateFormat: 'dd/mm/yy'
+    });
+    $('#supplier')
+        .textext({
+            plugins : 'prompt autocomplete ajax',
+            prompt  : 'Supplier',
+            ajax : {
+                url : '${baseURL}supplier.json',
+                dataType : 'json'                
+            }
+        });
+    $('#pegawai')
+        .textext({
+            plugins : 'prompt autocomplete ajax',
+            prompt  : 'Pegawai',
+            ajax : {
+                url : '${baseURL}pegawai.json',
+                dataType : 'json'                
+            }
+        });
+   refreshautocompletebarang(true);
+});
+</script>

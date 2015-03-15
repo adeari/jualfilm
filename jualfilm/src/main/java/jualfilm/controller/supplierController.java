@@ -85,7 +85,7 @@ public class supplierController {
     }
     
     
-    @RequestMapping(value="supplier/validation", method = RequestMethod.POST)
+    @RequestMapping(value="supplier/validation", produces = "application/json; charset=utf-8", method = RequestMethod.POST)
     @ResponseBody
     public String ValidationdataAdd(ModelMap model, HttpServletRequest request ) {
         String msg = "";
