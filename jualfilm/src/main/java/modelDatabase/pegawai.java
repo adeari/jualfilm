@@ -33,6 +33,14 @@ public class pegawai {
     
     @Column(name = "divisi", length = 50)
     private String divisi;
+    
+    public pegawai(String id_pegawai) {
+        this.id_pegawai = id_pegawai;
+    }
+    
+    public pegawai(){
+        
+    }
 
     public String getAlamat_pegawai() {
         return alamat_pegawai;

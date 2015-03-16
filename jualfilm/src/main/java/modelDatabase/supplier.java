@@ -30,6 +30,13 @@ public class supplier {
     
     @Column(name = "email_supplier", length = 200)
     private String email_supplier;
+    
+    public supplier(String kode_supplier) {
+        this.kode_supplier = kode_supplier;
+    }
+    
+    public supplier(){        
+    }
 
     public String getAlamat_supplier() {
         return alamat_supplier;

@@ -19,7 +19,7 @@
 			<div class="form-group">
 				<label for="no_po" class="col-xs-2 control-label">Nomer PO</label>
 				<div class="col-xs-10">
-                                    <input type="text" class="form-control" name="no_po" id="no_po" placeholder="Nomer PO"<c:if test="${!empty dataEdit}"> value="${dataEdit.no_po}"</c:if>>
+                                    <input type="text" class="form-control" name="no_po" id="no_po" placeholder="Kode barang"<c:if test="${!empty dataEdit}"> value="${dataEdit.no_po}"</c:if>>
                                     <c:if test="${!empty dataEdit}"><input type="hidden" name="no_po1" value="${dataEdit.no_po}"></c:if>
 				</div>
 			</div>
@@ -65,7 +65,7 @@
 					<td><textarea id="kodebarang" name="kodebarang" rows="1"></textarea></td>
 					<td><textarea id="namabarang" name="namabarang" rows="1"></textarea></td>
 					<td><input type="text" class="form-control numberfilter" name="jumlah" style="text-align: right;"/></td>
-					<td><button type="button" class="btn btn-danger btdeleteitem">Delete</button></td>
+					<td><button type="button" class="btn btn-danger">Delete</button></td>
 				</tr>
                           </tr>
 			</tbody>
@@ -119,7 +119,7 @@ ext: {
                         }
                         kodee = strdata.substr(0,i);
                         
-                        parentelement = this.input().parent().parent().parent().parent().parent().children().last();
+                        parentelement = this.input().parent().parent().parent().parent().parent();
                         parentelement.children().children().eq(1).find('textarea#namabarang').val(strdata.substr(i+2));
                         parentelement.children().children().eq(1).find('.text-prompt').remove();
                         parentelement.children().children().eq(1).find('input[name="namabarang"]').val(strdata.substr(i+2));
@@ -130,7 +130,7 @@ ext: {
                 }
             }
             if (arguments[0]=='hideDropdown') {
-                parentelement = this.input().parent().parent().parent().parent().parent().children().last();
+                parentelement = this.input().parent().parent().parent().parent().parent();
                 valueeee = parentelement.children().children().eq(0).find('input[name="kodebarang"]').val();
                 if (valueeee.length>0) {
                     parentelement.children().children().eq(0).find('textarea#kodebarang').val(valueeee);
@@ -185,8 +185,8 @@ $( document ).ready(function() {
         
         if (cansaved) {
             
-            $.post('${baseURL}purchase-order/validation', thisform.serialize(),function(data){
-                var jobj = data;
+            $.post('${baseURL}barang/validation', thisform.serialize(),function(data){
+                var jobj = jQuery.parseJSON( data );
                 if (jobj.cansaved == 1) {
                     thisform.unbind();
                     thisform.submit();
@@ -215,7 +215,7 @@ $( document ).ready(function() {
         }
         return sValue;
     }
-    $('body').on('keydown','.numberfilter',function(e) {
+    $('.numberfilter').keydown(function(e) {
     if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
             (e.keyCode == 65 && e.ctrlKey === true) || 
             (e.keyCode >= 35 && e.keyCode <= 39)) {
@@ -224,16 +224,13 @@ $( document ).ready(function() {
         if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
             e.preventDefault();
         }
-    });
-    
-    $('body').on('keyup','.numberfilter',function(e) {
+    }).keyup(function(event) {
         $(this).val(addCommas($(this).val()));
     });
-    
     $( "#tanggal" ).datepicker({
      beforeShow: function(input, inst)
        {
-          inst.dpDiv.css({marginTop: ($( "#tanggal" ).offset().top-190) + 'px', marginLeft: '0px'});
+          inst.dpDiv.css({marginTop: input.offsetHeight+190 + 'px', marginLeft: '0px'});
        },       
     dateFormat: 'dd/mm/yy'
     });
@@ -256,24 +253,18 @@ $( document ).ready(function() {
             }
         });
    $('#btnTambahBarang').click(function(e) {
-   
-   elmenttvall = $('#tbodyitem').children().last().children().eq(0).find('input[name="kodebarang"]').val();
-   $('#tbodyitem').children().last().children().eq(0).html(elmenttvall+'<input type="hidden" name="kodebarang" value="'+elmenttvall+'">');
-   elmenttvall = $('#tbodyitem').children().last().children().eq(1).find('input[name="namabarang"]').val();
-   $('#tbodyitem').children().last().children().eq(1).html(elmenttvall+'<input type="hidden" name="namabarang" value="'+elmenttvall+'">');
-      
+   vall = $('#tbodyitem').last().children().children().eq(0).find('input[name="kodebarang').val();
+   $('#tbodyitem').last().children().children().eq(0).html(vall);
+   vall = $('#tbodyitem').last().children().children().eq(1).find('input[name="namabarang').val();
+   $('#tbodyitem').last().children().children().eq(1).html(vall);
    komponen = '<tr>'
 	+'<td><textarea id="kodebarang" name="kodebarang" rows="1"></textarea></td>'
 	+'<td><textarea id="namabarang" name="namabarang" rows="1"></textarea></td>'
 	+'<td><input type="text" class="form-control numberfilter" name="jumlah" style="text-align: right;"/></td>'
-        +'<td><button type="button" class="btn btn-danger btdeleteitem">Delete</button></td>'
+        +'<td><button type="button" class="btn btn-danger">Delete</button></td>'
 	+'</tr>';
-    
    $('#tbodyitem').append(komponen);
    refreshautocompletebarang();
-   });
-   $('body').on('click','.btdeleteitem',function(){
-       $(this).parent().parent().remove();
    });
    refreshautocompletebarang();
 });

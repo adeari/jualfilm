@@ -25,10 +25,10 @@ public class detail_purchase_order implements Serializable {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "kode_detail_po", unique = true, nullable = false)
-    private Double kode_detail_po;
+    private Long kode_detail_po;
     
     @ManyToOne
-    @JoinColumn(name="no_po")
+    @JoinColumn(name="no_po", nullable = true)
     private purchase_order no_po;
     
     @OneToOne
@@ -57,13 +57,14 @@ public class detail_purchase_order implements Serializable {
         this.kode_barang = kode_barang;
     }
 
-    public Double getKode_detail_po() {
+    public Long getKode_detail_po() {
         return kode_detail_po;
     }
 
-    public void setKode_detail_po(Double kode_detail_po) {
+    public void setKode_detail_po(Long kode_detail_po) {
         this.kode_detail_po = kode_detail_po;
     }
+
 
     public String getNama_barang() {
         return nama_barang;
@@ -80,4 +81,5 @@ public class detail_purchase_order implements Serializable {
     public void setNo_po(purchase_order no_po) {
         this.no_po = no_po;
     }
+
 }

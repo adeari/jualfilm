@@ -27,6 +27,14 @@ public class barang {
     
     @Column(name = "jumlah_stok")
     private Long jumlah_stok;
+    
+    public barang() {
+        
+    }
+    
+    public barang(String kode_barang) {
+        this.kode_barang = kode_barang;
+    }
 
     public Long getHarga() {
         return harga;

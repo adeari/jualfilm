@@ -41,8 +41,8 @@
                             <tr>
                                 <td><c:out value="${data1.no_po}"/></td>
                                 <td><c:out value="${data1.tanggal}"/></td>
-                                <td><c:out value="${data1.kode_supplier_inpo}"/></td>
-                                <td><c:out value="${data1.id_pegawai_inpo}"/></td>
+                                <td><c:out value="${data1.supplier}"/></td>
+                                <td><c:out value="${data1.pegawai}"/></td>
                                 <td>
                                     <button type="button" class="btn btn-warning btedit" data-kode="${data1.no_po}">Edit</button>
                                     <button type="button" class="btn btn-danger btdelete" data-kode="${data1.no_po}">Delete</button>

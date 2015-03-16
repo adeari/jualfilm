@@ -11,9 +11,11 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.Column;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import org.hibernate.annotations.Cascade;
 /**
  *
  * @author ade
@@ -36,9 +38,8 @@ public class purchase_order {
     @JoinColumn(name="id_pegawai")
     private pegawai id_pegawai_inpo;
     
-    @OneToMany(cascade={CascadeType.ALL})
-    @JoinColumn(name="no_po")
-    private List<detail_purchase_order> detail_po;
+    @OneToMany(mappedBy = "no_po", cascade=CascadeType.ALL )
+    private List<detail_purchase_order> po_detail;
 
     public pegawai getId_pegawai_inpo() {
         return id_pegawai_inpo;
@@ -73,11 +74,13 @@ public class purchase_order {
         this.tanggal = tanggal;
     }
 
-    public List<detail_purchase_order> getDetail_po() {
-        return detail_po;
+    public List<detail_purchase_order> getPo_detail() {
+        return po_detail;
     }
 
-    public void setDetail_po(List<detail_purchase_order> detail_po) {
-        this.detail_po = detail_po;
+    public void setPo_detail(List<detail_purchase_order> po_detail) {
+        this.po_detail = po_detail;
     }
+    
+    
 }
