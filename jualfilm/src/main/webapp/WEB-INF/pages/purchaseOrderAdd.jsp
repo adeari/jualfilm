@@ -32,13 +32,13 @@
 			<div class="form-group">
 				<label for="alamat" class="col-xs-2 control-label">Supplier</label>
 				<div class="col-xs-10">
-                                    <textarea id="supplier" name="supplier" rows="1"></textarea>
+                                    <textarea id="supplier" name="supplier" rows="1"><c:if test="${!empty dataEdit}">${dataEdit.supplier}</c:if></textarea>
 				</div>
 			</div>
                         <div class="form-group">
 				<label for="alamat" class="col-xs-2 control-label">Pegawai</label>
 				<div class="col-xs-10">
-                                    <textarea id="pegawai" name="pegawai" rows="1"></textarea>
+                                    <textarea id="pegawai" name="pegawai" rows="1"><c:if test="${!empty dataEdit}">${dataEdit.pegawai}</c:if></textarea>
 				</div>
 			</div>
 <br/><br/>
@@ -61,6 +61,16 @@
 				</tr>
 			</thead>
 			<tbody id="tbodyitem">
+                            <c:if test="${!empty dataEdit.detailData}">                                
+                            <c:forEach items="${dataEdit.detailData}" var="data1">
+                                <tr>
+                                    <td>${data1.kode_barang}<input type="hidden" name="kodebarang" value="${data1.kode_barang}"></td>
+                                    <td>${data1.nama_barang}<input type="hidden" name="namabarang" value="${data1.nama_barang}"></td>
+                                    <td><input type="text" class="form-control numberfilter" name="jumlah" style="text-align: right;" value="${data1.jumlah}"/></td>
+                                    <td><button type="button" class="btn btn-danger btdeleteitem">Delete</button></td>
+                                </tr>                         
+                            </c:forEach>
+                            </c:if>
 				<tr>
 					<td><textarea id="kodebarang" name="kodebarang" rows="1"></textarea></td>
 					<td><textarea id="namabarang" name="namabarang" rows="1"></textarea></td>
@@ -149,8 +159,54 @@ ext: {
             ajax : {
                 url : '${baseURL}barang.json',
                 dataType : 'json'                
+            },
+ext: {
+    core: {
+        trigger: function()
+        {
+            
+            if (arguments[0]=='setInputData') {
+                if (arguments[1].length>0) {
+                    if (arguments[1].substr(0,1) == '(') {
+                        strdata = arguments[1].substr(1);
+                        posisitutupkurung = 0;
+                        lengthstr = strdata.length;
+                        i = 0;
+                        ketemu = false;
+                        while (!ketemu && i<lengthstr) {
+                            str1kata = strdata.substr(i,1);
+                            if (str1kata == ')') {
+                                ketemu = true;
+                            } else {
+                                i++;
+                            }
+                        }
+                        kodee = strdata.substr(0,i);
+                        
+                        parentelement = this.input().parent().parent().parent().parent().parent().children().last();                        
+                                                
+                        parentelement.children().children().eq(1).find('input[name="namabarang"]').val(strdata.substr(i+2));
+                                               
+                        parentelement.children().children().eq(0).find('input[name="kodebarang"]').val(kodee);
+                        parentelement.children().children().eq(0).find('textarea#kodebarang').val(kodee);
+                        parentelement.children().children().eq(0).find('.text-prompt').remove();
+                        
+                    }
+                }
             }
-        });
+            if (arguments[0]=='hideDropdown') {
+                parentelement = this.input().parent().parent().parent().parent().parent().children().last();
+                valueeee = parentelement.children().children().eq(1).find('input[name="namabarang"]').val();
+                if (valueeee.length>0) {
+                    parentelement.children().children().eq(1).find('textarea#namabarang').val(valueeee);
+                }
+            }
+            $.fn.textext.TextExt.prototype.trigger.apply(this, arguments);
+        }
+    }
+}
+        })
+        ;
 }
 $( document ).ready(function() {
     $('.form-horizontal').submit(function(e) {
@@ -239,8 +295,10 @@ $( document ).ready(function() {
     });
     $('#supplier')
         .textext({
-            plugins : 'prompt autocomplete ajax',
+            plugins : '<c:if test="${empty dataEdit}">prompt </c:if>autocomplete ajax',
+            <c:if test="${empty dataEdit}">
             prompt  : 'Supplier',
+            </c:if>
             ajax : {
                 url : '${baseURL}supplier.json',
                 dataType : 'json'                
@@ -248,8 +306,10 @@ $( document ).ready(function() {
         });
     $('#pegawai')
         .textext({
-            plugins : 'prompt autocomplete ajax',
-            prompt  : 'Pegawai',
+            plugins : '<c:if test="${empty dataEdit}">prompt </c:if>autocomplete ajax',
+            <c:if test="${empty dataEdit}">
+            prompt  : 'Supplier',
+            </c:if>
             ajax : {
                 url : '${baseURL}pegawai.json',
                 dataType : 'json'                
@@ -275,6 +335,16 @@ $( document ).ready(function() {
    $('body').on('click','.btdeleteitem',function(){
        $(this).parent().parent().remove();
    });
+   jQuery('textarea').keydown(function(event) {
+        if (event.keyCode == 13) {
+            $('.form-horizontal').submit();
+         }
+    });
+    <c:if test="${!empty dataEdit}">
+        $('.numberfilter').each(function() {
+            $(this).val(addCommas($(this).val()));
+        });
+    </c:if>
    refreshautocompletebarang();
 });
 </script>

@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <div class="row">
 	<div class="col-xs-8">
-		<h1>Nota Pesan</h1>
+		<h1>Nota Beli</h1>
 	</div>
 	<div class="col-xs-4 text-right">
 		<a href="${baseURL}purchase-order/add" class="btn btn-success">Tambah Baru</a>
@@ -77,7 +77,7 @@ $( document ).ready(function() {
     });
     $('.btdelete').click(function() {
         kode = $(this).data('kode');
-        if (confirm('Apakah kode Nota Pesan '+kode+' mau di hapus ?')) {
+        if (confirm('Apakah kode Nota Beli '+kode+' mau di hapus ?')) {
             document.location = '${baseURL}purchase-order/delete?kode='+kode;
         }
     });

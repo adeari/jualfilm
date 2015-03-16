@@ -38,7 +38,7 @@ public class purchase_order {
     @JoinColumn(name="id_pegawai")
     private pegawai id_pegawai_inpo;
     
-    @OneToMany(mappedBy = "no_po", cascade=CascadeType.ALL )
+    @OneToMany(mappedBy = "no_po", cascade =  CascadeType.REMOVE, orphanRemoval = true )
     private List<detail_purchase_order> po_detail;
 
     public pegawai getId_pegawai_inpo() {
