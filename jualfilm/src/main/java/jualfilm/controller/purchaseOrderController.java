@@ -82,9 +82,15 @@ public class purchaseOrderController {
         try {
             purchase_order po = (purchase_order) criteria.uniqueResult();
             Transaction trx = session.beginTransaction();
-            List<detail_purchase_order> ldpo = po.getPo_detail();
-            for (detail_purchase_order dpo : ldpo) {
-                session.delete(dpo);
+            try {
+                List<detail_purchase_order> ldpo = po.getPo_detail();
+                for (detail_purchase_order dpo : ldpo) {
+                        if (dpo != null) {
+                            session.delete(dpo);
+                        }
+                }
+            } catch (Exception ex) {
+                    System.out.println("error bagian ini "+ex.getMessage());
             }
             session.delete(po);
             trx.commit();
