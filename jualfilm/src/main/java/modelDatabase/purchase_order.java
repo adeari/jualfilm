@@ -11,11 +11,9 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.Column;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import org.hibernate.annotations.Cascade;
 /**
  *
  * @author ade
@@ -40,6 +38,14 @@ public class purchase_order {
     
     @OneToMany(mappedBy = "no_po", cascade =  CascadeType.REMOVE, orphanRemoval = true )
     private List<detail_purchase_order> po_detail;
+    
+    public purchase_order(){
+        
+    }
+    
+    public purchase_order(String no_po){
+        this.no_po = no_po;
+    }
 
     public pegawai getId_pegawai_inpo() {
         return id_pegawai_inpo;

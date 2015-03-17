@@ -20,5 +20,8 @@
     
     <mapping class="modelDatabase.purchase_order"/>
     <mapping class="modelDatabase.detail_purchase_order"/>
+    
+    <mapping class="modelDatabase.retur_pembelian"/>
+    
   </session-factory>
 </hibernate-configuration>

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import modelDatabase.barang;
 import modelDatabase.hibernateUtil;
 import modelDatabase.pegawai;
+import modelDatabase.purchase_order;
 import modelDatabase.supplier;
 import org.apache.taglibs.standard.tag.common.core.ForEachSupport;
 import org.hibernate.Criteria;
@@ -85,6 +86,26 @@ public class mainController {
             List<barang> lbarang = criteria.list();
             for (barang bg : lbarang) {
                 jsonArrayy.put("("+bg.getKode_barang()+") "+ bg.getNama_barang()) ;
+            }
+        } catch (Exception ex) {
+            
+        }
+        session.close();
+        return jsonArrayy.toString();
+    }
+    
+    @RequestMapping(value="po.json", produces = "application/json; charset=utf-8", method = RequestMethod.GET)
+    @ResponseBody
+    public String autocompletePurchaseORder(HttpServletRequest request ) {
+        String q = request.getParameter("q");
+        Session session = hibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria( purchase_order.class);
+        criteria.add(Restrictions.like("no_po", q+"%").ignoreCase());
+        JSONArray jsonArrayy = new JSONArray();
+        try {
+            List<purchase_order> lbarang = criteria.list();
+            for (purchase_order po : lbarang) {
+                jsonArrayy.put(po.getNo_po()) ;
             }
         } catch (Exception ex) {
             

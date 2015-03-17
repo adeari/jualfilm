@@ -247,8 +247,17 @@ public class purchaseOrderController {
         String tanggal = request.getParameter("tanggal");
         String supplier = request.getParameter("supplier");
         String pegawai = request.getParameter("pegawai");
-        pegawai = pegawai.substring((pegawai.indexOf("(")+1),pegawai.indexOf(")"));
-        supplier = supplier.substring((supplier.indexOf("(")+1),supplier.indexOf(")"));
+        if (pegawai != null ) {
+            if (pegawai.length() > 0 ) {
+                pegawai = pegawai.substring((pegawai.indexOf("(")+1),pegawai.indexOf(")"));
+            }
+        }
+        if (supplier != null ) {
+            if (supplier.length() > 0 ) {
+                supplier = supplier.substring((supplier.indexOf("(")+1),supplier.indexOf(")"));
+            }
+        }
+        
         
         String[] kodeparameter =  request.getParameterValues("kodebarang");
         String[] namabarang =  request.getParameterValues("namabarang");
@@ -266,8 +275,8 @@ public class purchaseOrderController {
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
             try {
                 po.setTanggal(new Timestamp(df.parse(tanggal).getTime()));
-            } catch (ParseException ex) {
-                Logger.getLogger(purchaseOrderController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                
             }
             po.setKode_supplier_inpo(new supplier(supplier));
             po.setId_pegawai_inpo(new pegawai(pegawai));

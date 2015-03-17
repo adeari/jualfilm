@@ -308,7 +308,7 @@ $( document ).ready(function() {
         .textext({
             plugins : '<c:if test="${empty dataEdit}">prompt </c:if>autocomplete ajax',
             <c:if test="${empty dataEdit}">
-            prompt  : 'Supplier',
+            prompt  : 'Pegawai',
             </c:if>
             ajax : {
                 url : '${baseURL}pegawai.json',

@@ -93,7 +93,7 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Pembelian <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
 								<li><a href="${baseURL}purchase-order">Nota Beli</a></li>
-								<li><a href="#">Surat Terima</a></li>
+								<li><a href="${baseURL}retur-pembelian">Retur Pembelian</a></li>
 							</ul>
 						</li>
 						<li class="dropdown">
