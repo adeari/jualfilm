@@ -52,6 +52,7 @@ public class returPembelianController {
             Map mapData = new HashMap();
             mapData.put("no_retur_pembelian", rpp.getNo_retur_pembelian());
             mapData.put("tanggal", df.format(rpp.getTanggal()));
+            mapData.put("no_po", rpp.getNo_po().getNo_po());
             try {
                 mapData.put("pegawai", "("+ rpp.getId_pegawai().getId_pegawai()+") "+ rpp.getId_pegawai().getNama_pegawai());
             } catch (Exception ex) {
@@ -81,9 +82,9 @@ public class returPembelianController {
         Session session = hibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(retur_pembelian.class);
         criteria.add(Restrictions.eq("no_retur_pembelian",kodesupplier));
-        supplier supplier1 = (supplier) criteria.uniqueResult();
+        retur_pembelian rpp = (retur_pembelian) criteria.uniqueResult();
         Transaction trx = session.beginTransaction();
-        session.delete(supplier1);
+        session.delete(rpp);
         trx.commit();
         session.close();
         return "redirect:/retur-pembelian";
@@ -251,20 +252,23 @@ public class returPembelianController {
                 
             }
         }
-        
+        System.out.println(" no_po "+no_po);
         String pegawai = request.getParameter("pegawai");
         if (pegawai != null ) {
             if (pegawai.length() > 0 ) {
                 pegawai = pegawai.substring((pegawai.indexOf("(")+1),pegawai.indexOf(")"));
             }
         }
-        
+        System.out.println(" pegawai "+pegawai);
         String supplier = request.getParameter("supplier");
         if (supplier != null ) {
             if (supplier.length() > 0 ) {
                 supplier = supplier.substring((supplier.indexOf("(")+1),supplier.indexOf(")"));
             }
         }
+        
+        System.out.println(" supplier "+supplier);
+        
         String kode_barang = request.getParameter("kode_barang");
         if (kode_barang != null ) {
             if (kode_barang.length() > 0 ) {
@@ -272,10 +276,12 @@ public class returPembelianController {
             }
         }
         
+        System.out.println(" kode_barang "+kode_barang);
+        
         
         Session session = hibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(retur_pembelian.class);
-        criteria.add(Restrictions.eq("kode_supplier", no_retur_pembelian1 ));
+        criteria.add(Restrictions.eq("no_retur_pembelian", no_retur_pembelian1 ));
         if (criteria.uniqueResult() != null) {        
             Transaction trx = session.beginTransaction();
             retur_pembelian rpp = (retur_pembelian) criteria.uniqueResult();

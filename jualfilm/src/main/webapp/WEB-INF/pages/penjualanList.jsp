@@ -9,10 +9,10 @@
 <!DOCTYPE html>
 <div class="row">
 	<div class="col-xs-8">
-		<h1>Retur Pembelian</h1>
+		<h1>Penjualan</h1>
 	</div>
 	<div class="col-xs-4 text-right">
-		<a href="${baseURL}retur-pembelian/add" class="btn btn-success">Tambah Baru</a>
+		<a href="${baseURL}penjualanadd" class="btn btn-success">Tambah Baru</a>
 	</div>
 </div>
 
@@ -25,17 +25,13 @@
 				<col width="100" />
 				<col width="100" />
 				<col width="100" />
-				<col width="100" />
-                                <col width="100" />
 			</colgroup>
 			<thead>
 				<tr>
-					<th>Nomor Retur Pembelian</th>
+					<th>Nomer PO</th>
 					<th>Tanggal</th>
-					<th>No. PO</th>
-					<th>Pegawai</th>
 					<th>Supplier</th>
-                                        <th>Barang</th>
+					<th>Pegawai Entry</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -43,15 +39,13 @@
                             
                         <c:forEach items="${dataList}" var="data1">
                             <tr>
-                                <td><c:out value="${data1.no_retur_pembelian}"/></td>
-                                <td><c:out value="${data1.tanggal}"/></td>
                                 <td><c:out value="${data1.no_po}"/></td>
-                                <td><c:out value="${data1.pegawai}"/></td>
+                                <td><c:out value="${data1.tanggal}"/></td>
                                 <td><c:out value="${data1.supplier}"/></td>
-                                <td><c:out value="${data1.barang}"/></td>
+                                <td><c:out value="${data1.pegawai}"/></td>
                                 <td>
-                                    <button type="button" class="btn btn-warning btedit" data-kode="${data1.no_retur_pembelian}">Edit</button>
-                                    <button type="button" class="btn btn-danger btdelete" data-kode="${data1.no_retur_pembelian}">Delete</button>
+                                    <button type="button" class="btn btn-warning btedit" data-kode="${data1.no_po}">Edit</button>
+                                    <button type="button" class="btn btn-danger btdelete" data-kode="${data1.no_po}">Delete</button>
                                 </td>
                             </tr>                    
                         </c:forEach>
@@ -61,16 +55,34 @@
 </div>
 <%@include file="/WEB-INF/layout/footer.jsp" %>
 <script>
+function addCommas( sValue ) 
+{
+    if (sValue.length > 0 ) {
+    sValue = sValue.replace(/[#.]/g,'');
+    sValue = sValue.replace(/[^0-9\.]/g,'');
+    sValue1 = parseFloat(sValue);
+    sValue = sValue1.toString();
+        var sRegExp = new RegExp('(-?[0-9]+)([0-9]{3})');
+
+        while(sRegExp.test(sValue)) {
+            sValue = sValue.replace(sRegExp, '$1.$2');
+        }
+    }
+    return sValue;
+}
 $( document ).ready(function() {
     $('.btedit').click(function() {
         kode = $(this).data('kode');
-        document.location = '${baseURL}retur-pembelian/edit?kode='+kode;
+        document.location = '${baseURL}penjualanedit?kode='+kode;
     });
     $('.btdelete').click(function() {
         kode = $(this).data('kode');
-        if (confirm('Apakah kode supplier '+kode+' mau di hapus ?')) {
-            document.location = '${baseURL}retur-pembelian/delete?kode='+kode;
+        if (confirm('Apakah kode Nota Beli '+kode+' mau di hapus ?')) {
+            document.location = '${baseURL}penjualandelete?kode='+kode;
         }
+    });
+    $('.numberfilter').each(function() {
+        $(this).text(addCommas($(this).text()));
     });
 });
 </script>
