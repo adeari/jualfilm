@@ -23,5 +23,11 @@
     
     <mapping class="modelDatabase.retur_pembelian"/>
     
+    <mapping class="modelDatabase.penjualan"/>
+    <mapping class="modelDatabase.detail_penjualan"/>
+    <mapping class="modelDatabase.retur_penjualan"/>
+    
+    <mapping class="modelDatabase.klaim_garansi"/>
+    
   </session-factory>
 </hibernate-configuration>

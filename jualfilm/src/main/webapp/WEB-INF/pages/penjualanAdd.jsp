@@ -17,10 +17,10 @@
             <form class="form-horizontal" method="post">
                 <div class="form-group" id="msg" style="background-color:yellow;text-align:center;display:none"></div>
 			<div class="form-group">
-				<label for="no_po" class="col-xs-2 control-label">Nomer PO</label>
+				<label for="no_faktur" class="col-xs-2 control-label">Nomer Faktur</label>
 				<div class="col-xs-10">
-                                    <input type="text" class="form-control" name="no_po" id="no_po" placeholder="Nomer PO"<c:if test="${!empty dataEdit}"> value="${dataEdit.no_po}"</c:if>>
-                                    <c:if test="${!empty dataEdit}"><input type="hidden" name="no_po1" value="${dataEdit.no_po}"></c:if>
+                                    <input type="text" class="form-control" name="no_faktur" id="no_faktur" placeholder="Nomer PO"<c:if test="${!empty dataEdit}"> value="${dataEdit.no_faktur}"</c:if>>
+                                    <c:if test="${!empty dataEdit}"><input type="hidden" name="no_faktur1" value="${dataEdit.no_faktur}"></c:if>
 				</div>
 			</div>
 			<div class="form-group">
@@ -30,9 +30,9 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="alamat" class="col-xs-2 control-label">Supplier</label>
+				<label for="alamat" class="col-xs-2 control-label">Pelanggan</label>
 				<div class="col-xs-10">
-                                    <textarea id="supplier" name="supplier" rows="1"><c:if test="${!empty dataEdit}">${dataEdit.supplier}</c:if></textarea>
+                                    <textarea id="pelanggan" name="pelanggan" rows="1"><c:if test="${!empty dataEdit}">${dataEdit.pelanggan}</c:if></textarea>
 				</div>
 			</div>
                         <div class="form-group">
@@ -49,14 +49,20 @@
 			<colgroup>
 				<col width="100" />
 				<col width="100" />
-				<col width="100" />
-				<col width="50" />
+				<col width="40" />
+				<col width="40" />
+				<col width="40" />
+				<col width="40" />
+                                <col width="40" />
 			</colgroup>
 			<thead>
 				<tr>
 					<th>Kode Barang</th>
 					<th>Nama Barang</th>
 					<th style="text-align: right;">Jumlah</th>
+					<th style="text-align: right;">Harga</th>
+					<th style="text-align: right;">Diskon</th>
+					<th style="text-align: right;">Total</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -74,7 +80,10 @@
 				<tr>
 					<td><textarea id="kodebarang" name="kodebarang" rows="1"></textarea></td>
 					<td><textarea id="namabarang" name="namabarang" rows="1"></textarea></td>
-					<td><input type="text" class="form-control numberfilter" name="jumlah" style="text-align: right;"/></td>
+					<td><input type="text" class="form-control numberfilter jumlah" name="jumlah" style="text-align: right;"/></td>
+                                        <td><input type="text" class="form-control numberfilter harga" name="harga" style="text-align: right;"/></td>
+                                        <td><input type="text" class="form-control numberfilter diskon" name="diskon" style="text-align: right;"/></td>
+                                        <td><input type="text" class="form-control numberfilter total" name="total" style="text-align: right;"/></td>
 					<td><button type="button" class="btn btn-danger btdeleteitem">Delete</button></td>
 				</tr>
                           </tr>
@@ -208,13 +217,26 @@ ext: {
         })
         ;
 }
+
+function countdata() {
+    $('table .jumlah').each(function() {
+           var jumlah = $(this).parent().parent().children().eq(2).children().val().replace(/\./g,'');
+           var harga = $(this).parent().parent().children().eq(3).children().val().replace(/\./g,'');
+           var diskon = $(this).parent().parent().children().eq(4).children().val().replace(/\./g,'');
+           alert(jumlah+' == '+harga+' --- '+diskon);
+           var hargasetelahdiskon = harga - (harga*diskon/100);
+           var total = jumlah * hargasetelahdiskon;
+           var totalelement = $(this).parent().parent().children().eq(5).children();
+           totalelement.val(total);
+    });
+}
 $( document ).ready(function() {
     $('.form-horizontal').submit(function(e) {
         e.preventDefault();
         var thisform = $(this);
         cansaved = true;
         msg = "";
-        elemtt = $('#no_po');
+        elemtt = $('#no_faktur');
         if (cansaved && elemtt.val().length < 1){
             cansaved = false;
             msg = "Isi Nomor PO";
@@ -293,14 +315,14 @@ $( document ).ready(function() {
        },       
     dateFormat: 'dd/mm/yy'
     });
-    $('#supplier')
+    $('#pelanggan')
         .textext({
             plugins : '<c:if test="${empty dataEdit}">prompt </c:if>autocomplete ajax',
             <c:if test="${empty dataEdit}">
-            prompt  : 'Supplier',
+            prompt  : 'Pelanggan',
             </c:if>
             ajax : {
-                url : '${baseURL}supplier.json',
+                url : '${baseURL}pelanggan.json',
                 dataType : 'json'                
             }
         });
@@ -325,7 +347,10 @@ $( document ).ready(function() {
    komponen = '<tr>'
 	+'<td><textarea id="kodebarang" name="kodebarang" rows="1"></textarea></td>'
 	+'<td><textarea id="namabarang" name="namabarang" rows="1"></textarea></td>'
-	+'<td><input type="text" class="form-control numberfilter" name="jumlah" style="text-align: right;"/></td>'
+	+'<td><input type="text" class="form-control numberfilter jumlah" name="jumlah" style="text-align: right;"/></td>'
+	+'<td><input type="text" class="form-control numberfilter harga" name="harga" style="text-align: right;"/></td>'
+	+'<td><input type="text" class="form-control numberfilter diskon" name="diskon" style="text-align: right;"/></td>'
+	+'<td><input type="text" class="form-control numberfilter total" name="total" style="text-align: right;"/></td>'
         +'<td><button type="button" class="btn btn-danger btdeleteitem">Delete</button></td>'
 	+'</tr>';
     
@@ -346,5 +371,9 @@ $( document ).ready(function() {
         });
     </c:if>
    refreshautocompletebarang();
+   
+   $('table').on('keyup','.jumlah',function() {
+       countdata();
+   });
 });
 </script>

@@ -12,7 +12,7 @@
 		<h1>Penjualan</h1>
 	</div>
 	<div class="col-xs-4 text-right">
-		<a href="${baseURL}penjualanadd" class="btn btn-success">Tambah Baru</a>
+		<a href="${baseURL}penjualan/add" class="btn btn-success">Tambah Baru</a>
 	</div>
 </div>
 

@@ -84,8 +84,7 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Penjualan <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="${baseURL}purchase-order">Nota Pesan</a></li>
-								<li><a href="#">Nota Jual</a></li>
+								<li><a href="${baseURL}penjualan">Nota Jual</a></li>
 								<li><a href="#">Surat Jalan</a></li>
 							</ul>
 						</li>

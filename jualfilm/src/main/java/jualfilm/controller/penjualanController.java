@@ -69,7 +69,7 @@ public class penjualanController {
         }
         model.addAttribute("dataList", dataShow);
         session.close();
-        return "purchaseOrderList";
+        return "penjualanList";
     }
     
     @RequestMapping(value="penjualan/delete", method = RequestMethod.GET)
@@ -97,13 +97,13 @@ public class penjualanController {
             System.out.println(" error dataDelete "+ex.getMessage());
         }
         session.close();
-        return "redirect:/purchase-order";
+        return "redirect:/penjualan";
     }
     
     @RequestMapping(value="penjualan/add", method = RequestMethod.GET)
     public String dataAdd(ModelMap model) {  
-        model.addAttribute("headerapps", "Nota Beli Baru");        
-        return "purchaseOrderAdd";
+        model.addAttribute("headerapps", " Penjualan Baru");        
+        return "penjualanAdd";
     }
     
     @RequestMapping(value="penjualan/add", method = RequestMethod.POST)
@@ -161,7 +161,7 @@ public class penjualanController {
         trx.commit();
         session.close();
         
-        return "redirect:/purchase-order";
+        return "redirect:/penjualan";
     }
     
     
@@ -198,7 +198,7 @@ public class penjualanController {
     
     @RequestMapping(value="penjualan/edit", method = RequestMethod.GET)
     public String dataEdit(ModelMap model, HttpServletRequest request ) {
-        String returndata = "redirect:/purchase-order";
+        String returndata = "redirect:/penjualan";
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String kodebarang = request.getParameter("kode");
         Session session = hibernateUtil.getSessionFactory().openSession();
@@ -231,7 +231,7 @@ public class penjualanController {
            }
            modelHere.put("detailData", detailData);
             model.addAttribute("dataEdit", modelHere);
-            returndata = "purchaseOrderAdd";
+            returndata = "penjualanAdd";
         }
         session.close();
         model.addAttribute("headerapps", "Edit Nota Beli");
@@ -240,7 +240,7 @@ public class penjualanController {
     
     @RequestMapping(value="penjualan/edit", method = RequestMethod.POST)
     public String DOdataEdit(ModelMap model, HttpServletRequest request ) {  
-        String returndata = "redirect:/purchase-order";
+        String returndata = "redirect:/penjualan";
         String no_po = request.getParameter("no_po");
         String no_po1 = request.getParameter("no_po1");
         String tanggal = request.getParameter("tanggal");
