@@ -29,7 +29,7 @@
 			</colgroup>
 			<thead>
 				<tr>
-					<th>Nomor Pelanggan</th>
+					<th>Nomer Pelanggan</th>
 					<th>Nama</th>
 					<th>Alamat</th>
 					<th>Telp</th>

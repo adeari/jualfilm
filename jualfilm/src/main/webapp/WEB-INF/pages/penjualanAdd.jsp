@@ -19,7 +19,7 @@
 			<div class="form-group">
 				<label for="no_faktur" class="col-xs-2 control-label">Nomer Faktur</label>
 				<div class="col-xs-10">
-                                    <input type="text" class="form-control" name="no_faktur" id="no_faktur" placeholder="Nomer PO"<c:if test="${!empty dataEdit}"> value="${dataEdit.no_faktur}"</c:if>>
+                                    <input type="text" class="form-control" name="no_faktur" id="no_faktur" placeholder="Nomer Faktur"<c:if test="${!empty dataEdit}"> value="${dataEdit.no_faktur}"</c:if>>
                                     <c:if test="${!empty dataEdit}"><input type="hidden" name="no_faktur1" value="${dataEdit.no_faktur}"></c:if>
 				</div>
 			</div>
@@ -61,7 +61,7 @@
 					<th>Nama Barang</th>
 					<th style="text-align: right;">Jumlah</th>
 					<th style="text-align: right;">Harga</th>
-					<th style="text-align: right;">Diskon</th>
+					<th style="text-align: right;">Diskon (%)</th>
 					<th style="text-align: right;">Total</th>
 					<th></th>
 				</tr>
@@ -73,6 +73,9 @@
                                     <td>${data1.kode_barang}<input type="hidden" name="kodebarang" value="${data1.kode_barang}"></td>
                                     <td>${data1.nama_barang}<input type="hidden" name="namabarang" value="${data1.nama_barang}"></td>
                                     <td><input type="text" class="form-control numberfilter" name="jumlah" style="text-align: right;" value="${data1.jumlah}"/></td>
+                                    <td><input type="text" class="form-control numberfilter" name="harga" style="text-align: right;" value="${data1.harga}"/></td>
+                                    <td><input type="text" class="form-control numberfilter" name="diskon" style="text-align: right;" value="${data1.diskon}"/></td>
+                                    <td><input type="text" class="form-control numberfilter" name="total" style="text-align: right;" value="${data1.total}"/></td>
                                     <td><button type="button" class="btn btn-danger btdeleteitem">Delete</button></td>
                                 </tr>                         
                             </c:forEach>
@@ -82,8 +85,8 @@
 					<td><textarea id="namabarang" name="namabarang" rows="1"></textarea></td>
 					<td><input type="text" class="form-control numberfilter jumlah" name="jumlah" style="text-align: right;"/></td>
                                         <td><input type="text" class="form-control numberfilter harga" name="harga" style="text-align: right;"/></td>
-                                        <td><input type="text" class="form-control numberfilter diskon" name="diskon" style="text-align: right;"/></td>
-                                        <td><input type="text" class="form-control numberfilter total" name="total" style="text-align: right;"/></td>
+                                        <td><input type="text" class="form-control numberfilter diskon" name="diskon" value="0" style="text-align: right;"/></td>
+                                        <td><input type="text" class="form-control numberfilter total" name="total" value="0" style="text-align: right;"/></td>
 					<td><button type="button" class="btn btn-danger btdeleteitem">Delete</button></td>
 				</tr>
                           </tr>
@@ -218,15 +221,31 @@ ext: {
         ;
 }
 
+function addCommas( sValue ) 
+    {
+        if (sValue.length > 0 ) {
+        sValue = sValue.replace(/[#.]/g,'');
+        sValue = sValue.replace(/[^0-9\.]/g,'');
+        sValue1 = parseFloat(sValue);
+        sValue = sValue1.toString();
+            var sRegExp = new RegExp('(-?[0-9]+)([0-9]{3})');
+
+            while(sRegExp.test(sValue)) {
+                sValue = sValue.replace(sRegExp, '$1.$2');
+            }
+        }
+        return sValue;
+    }
+
 function countdata() {
     $('table .jumlah').each(function() {
            var jumlah = $(this).parent().parent().children().eq(2).children().val().replace(/\./g,'');
            var harga = $(this).parent().parent().children().eq(3).children().val().replace(/\./g,'');
            var diskon = $(this).parent().parent().children().eq(4).children().val().replace(/\./g,'');
-           alert(jumlah+' == '+harga+' --- '+diskon);
            var hargasetelahdiskon = harga - (harga*diskon/100);
            var total = jumlah * hargasetelahdiskon;
-           var totalelement = $(this).parent().parent().children().eq(5).children();
+           total = addCommas(total.toString());
+           var totalelement = $(this).parent().parent().children().eq(5).children();           
            totalelement.val(total);
     });
 }
@@ -248,10 +267,10 @@ $( document ).ready(function() {
             msg = "Isi Tanggal";
             elemtt.focus();
         }
-        elemtt = $('#supplier');
+        elemtt = $('#pelanggan');
         if (cansaved && elemtt.val().length < 1){
             cansaved = false;
-            msg = "Isi supplier";
+            msg = "Isi pelanggan";
             elemtt.focus();
         }
         elemtt = $('#pegawai');
@@ -277,22 +296,7 @@ $( document ).ready(function() {
             $('#msg').text(msg);
             $('#msg').css('display','block');
         }
-    });
-    function addCommas( sValue ) 
-    {
-        if (sValue.length > 0 ) {
-        sValue = sValue.replace(/[#.]/g,'');
-        sValue = sValue.replace(/[^0-9\.]/g,'');
-        sValue1 = parseFloat(sValue);
-        sValue = sValue1.toString();
-            var sRegExp = new RegExp('(-?[0-9]+)([0-9]{3})');
-
-            while(sRegExp.test(sValue)) {
-                sValue = sValue.replace(sRegExp, '$1.$2');
-            }
-        }
-        return sValue;
-    }
+    });    
     $('body').on('keydown','.numberfilter',function(e) {
     if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
             (e.keyCode == 65 && e.ctrlKey === true) || 
@@ -349,8 +353,8 @@ $( document ).ready(function() {
 	+'<td><textarea id="namabarang" name="namabarang" rows="1"></textarea></td>'
 	+'<td><input type="text" class="form-control numberfilter jumlah" name="jumlah" style="text-align: right;"/></td>'
 	+'<td><input type="text" class="form-control numberfilter harga" name="harga" style="text-align: right;"/></td>'
-	+'<td><input type="text" class="form-control numberfilter diskon" name="diskon" style="text-align: right;"/></td>'
-	+'<td><input type="text" class="form-control numberfilter total" name="total" style="text-align: right;"/></td>'
+	+'<td><input type="text" class="form-control numberfilter diskon" value="0" name="diskon" style="text-align: right;"/></td>'
+	+'<td><input type="text" class="form-control numberfilter total" value="0" name="total" style="text-align: right;"/></td>'
         +'<td><button type="button" class="btn btn-danger btdeleteitem">Delete</button></td>'
 	+'</tr>';
     
@@ -373,6 +377,14 @@ $( document ).ready(function() {
    refreshautocompletebarang();
    
    $('table').on('keyup','.jumlah',function() {
+       countdata();
+   });
+   
+   $('table').on('keyup','.harga',function() {
+       countdata();
+   });
+   
+   $('table').on('keyup','.diskon',function() {
        countdata();
    });
 });

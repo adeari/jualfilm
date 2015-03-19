@@ -18,8 +18,11 @@ import java.util.logging.Logger;
 import modelDatabase.hibernateUtil;
 import javax.servlet.http.HttpServletRequest;
 import modelDatabase.barang;
+import modelDatabase.detail_penjualan;
 import modelDatabase.detail_purchase_order;
 import modelDatabase.pegawai;
+import modelDatabase.pelanggan;
+import modelDatabase.penjualan;
 import modelDatabase.purchase_order;
 import modelDatabase.supplier;
 
@@ -47,21 +50,21 @@ public class penjualanController {
     @RequestMapping(value="penjualan", method = RequestMethod.GET)
     public String dataList(ModelMap model) {      
         Session session = hibernateUtil.getSessionFactory().openSession();
-        Criteria criteria = session.createCriteria(purchase_order.class);
-        List<purchase_order> lData = criteria.list();
+        Criteria criteria = session.createCriteria(penjualan.class);
+        List<penjualan> lData = criteria.list();
         List dataShow = new ArrayList();
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        for (purchase_order po : lData) {
+        for (penjualan pj : lData) {
            Map<String, String> modelHere = new HashMap<String, String>();
-           modelHere.put("no_po", po.getNo_po());
-           modelHere.put("tanggal", df.format(po.getTanggal()));
+           modelHere.put("no_faktur", pj.getNo_faktur());
+           modelHere.put("tanggal", df.format(pj.getTanggal()));
            try {
-            modelHere.put("supplier", "("+ po.getKode_supplier_inpo().getKode_supplier()+") "+po.getKode_supplier_inpo().getNama_supplier() );
+            modelHere.put("pelanggan", "("+ pj.getKode_pelanggan().getKode_pelanggan()+") "+pj.getKode_pelanggan().getNama_pelanggan() );
            } catch (Exception ex) {
                
            }
            try {
-            modelHere.put("pegawai", "("+ po.getId_pegawai_inpo().getId_pegawai()+ ") " +po.getId_pegawai_inpo().getNama_pegawai());
+            modelHere.put("pegawai", "("+ pj.getId_pegawai().getId_pegawai()+ ") " +pj.getId_pegawai().getNama_pegawai());
            } catch (Exception ex) {
                
            }
@@ -76,22 +79,22 @@ public class penjualanController {
     public String dataDelete(ModelMap model, HttpServletRequest request) {
         String kodebarang = request.getParameter("kode");
         Session session = hibernateUtil.getSessionFactory().openSession();
-        Criteria criteria = session.createCriteria(purchase_order.class);
-        criteria.add(Restrictions.eq("no_po",kodebarang));
+        Criteria criteria = session.createCriteria(penjualan.class);
+        criteria.add(Restrictions.eq("no_faktur",kodebarang));
         try {
-            purchase_order po = (purchase_order) criteria.uniqueResult();
+            penjualan pj = (penjualan) criteria.uniqueResult();
             Transaction trx = session.beginTransaction();
             try {
-                List<detail_purchase_order> ldpo = po.getPo_detail();
-                for (detail_purchase_order dpo : ldpo) {
-                        if (dpo != null) {
-                            session.delete(dpo);
+                List<detail_penjualan> ldpe = pj.getPenjualan_detail();
+                for (detail_penjualan dpjj : ldpe) {
+                        if (dpjj != null) {
+                            session.delete(dpjj);
                         }
                 }
             } catch (Exception ex) {
                     System.out.println("error bagian ini "+ex.getMessage());
             }
-            session.delete(po);
+            session.delete(pj);
             trx.commit();
         } catch (Exception ex) {
             System.out.println(" error dataDelete "+ex.getMessage());
@@ -108,49 +111,72 @@ public class penjualanController {
     
     @RequestMapping(value="penjualan/add", method = RequestMethod.POST)
     public String DOdataAdd(ModelMap model, HttpServletRequest request ) {
-        String no_po = request.getParameter("no_po");
+        String no_faktur = request.getParameter("no_faktur");
         String tanggal = request.getParameter("tanggal");
-        String supplier = request.getParameter("supplier");
+        String pelanggan = request.getParameter("pelanggan");
         String pegawai = request.getParameter("pegawai");
         pegawai = pegawai.substring((pegawai.indexOf("(")+1),pegawai.indexOf(")"));
-        supplier = supplier.substring((supplier.indexOf("(")+1),supplier.indexOf(")"));
+        pelanggan = pelanggan.substring((pelanggan.indexOf("(")+1),pelanggan.indexOf(")"));
         
         String[] kodeparameter =  request.getParameterValues("kodebarang");
         String[] namabarang =  request.getParameterValues("namabarang");
         String[] jumlah =  request.getParameterValues("jumlah");
+        String[] harga =  request.getParameterValues("harga");
+        String[] diskon =  request.getParameterValues("diskon");
+        String[] total =  request.getParameterValues("total");
         int lengthDAta = kodeparameter.length;
         
         Session session = hibernateUtil.getSessionFactory().openSession();
         Transaction trx = session.beginTransaction();
         
-       purchase_order po = new purchase_order();
-       po.setNo_po(no_po);
+       penjualan pj = new penjualan();
+       pj.setNo_faktur(no_faktur);
        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         try {
-            po.setTanggal(new Timestamp(df.parse(tanggal).getTime()));
+            pj.setTanggal(new Timestamp(df.parse(tanggal).getTime()));
         } catch (ParseException ex) {
-            Logger.getLogger(penjualanController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(purchaseOrderController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        po.setKode_supplier_inpo(new supplier(supplier));
-        po.setId_pegawai_inpo(new pegawai(pegawai));
-        session.save(po);
+        pj.setKode_pelanggan(new pelanggan(pelanggan));
+        pj.setId_pegawai(new pegawai(pegawai));
+        session.save(pj);
                 
         int i = 0;
         for (i = 0; i<lengthDAta; i++) {
             if (kodeparameter[i].length()>0
                     &&namabarang[i].length()>0
                     &&jumlah[i].length()>0
+                    &&harga[i].length()>0
+                    &&total[i].length()>0
                     ) {
                 String jmlBarang = jumlah[i].replace(".", "");
+                String hargaS = harga[i].replace(".", "");
+                String diskonS = diskon[i].replace(".", "");
+                String totalS = total[i].replace(".", "");
                 try {
                     Long jmlBarangl = Long.valueOf(jmlBarang);
                     if (jmlBarangl>0) {
-                        detail_purchase_order dpo = new detail_purchase_order();
-                        dpo.setNo_po(po);
-                        dpo.setKode_barang(new barang(kodeparameter[i]));
-                        dpo.setNama_barang(namabarang[i]);
-                        dpo.setJumlah(jmlBarangl);
-                        session.save(dpo);
+                        detail_penjualan dpe = new detail_penjualan();
+                        dpe.setNo_faktur(pj);
+                        dpe.setKode_barang(new barang(kodeparameter[i]));
+                        dpe.setNama_barang(namabarang[i]);
+                        dpe.setJumlah(jmlBarangl);
+                        try {
+                            dpe.setHarga(Long.valueOf(hargaS));
+                        } catch (Exception ex) {
+                            
+                        }
+                        try {
+                            dpe.setDiskon(Integer.valueOf(diskonS));
+                        } catch (Exception ex) {
+                            
+                        }
+                        try {
+                            dpe.setTotal(Long.valueOf(totalS));
+                        } catch (Exception ex) {
+                            
+                        }
+                        session.save(dpe);
                     }
                 } catch (Exception ex) {
                     System.out.println(" error add po "+ex.getMessage());
@@ -171,19 +197,19 @@ public class penjualanController {
         String msg = "";
         int cansaved = 1;
         JSONObject jobj = new JSONObject();
-         String kodebarang = request.getParameter("no_po");
+         String kodebarang = request.getParameter("no_faktur");
         
         
         Session session = hibernateUtil.getSessionFactory().openSession();
-        Criteria criteria = session.createCriteria(purchase_order.class).setProjection(Projections.rowCount());
-        if ( request.getParameter("no_po1") != null ) {
-            criteria.add(Restrictions.ne("no_po", request.getParameter("no_po1").toString() ));
+        Criteria criteria = session.createCriteria(penjualan.class).setProjection(Projections.rowCount());
+        if ( request.getParameter("no_faktur1") != null ) {
+            criteria.add(Restrictions.ne("no_faktur", request.getParameter("no_faktur1").toString() ));
         }
-        criteria.add(Restrictions.eq("no_po", kodebarang ));
+        criteria.add(Restrictions.eq("no_faktur", kodebarang ));
         
         if (Integer.valueOf(criteria.uniqueResult().toString()) > 0 ){
             cansaved = 0;
-            msg = "Nomor PO "+kodebarang+" telah digunakan oleh barang lain";
+            msg = "Nomor Faktur "+kodebarang+" telah digunakan oleh barang lain";
         }
          
         try {
@@ -202,31 +228,34 @@ public class penjualanController {
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String kodebarang = request.getParameter("kode");
         Session session = hibernateUtil.getSessionFactory().openSession();
-        Criteria criteria = session.createCriteria(purchase_order.class);
-        criteria.add(Restrictions.eq("no_po",kodebarang));
+        Criteria criteria = session.createCriteria(penjualan.class);
+        criteria.add(Restrictions.eq("no_faktur",kodebarang));
         if (criteria.uniqueResult() != null) {
-            purchase_order po = (purchase_order) criteria.uniqueResult();
+            penjualan pj = (penjualan) criteria.uniqueResult();
             Map modelHere = new HashMap();
-            modelHere.put("no_po", po.getNo_po());
-            modelHere.put("tanggal", df.format( po.getTanggal()) );
+            modelHere.put("no_faktur", pj.getNo_faktur());
+            modelHere.put("tanggal", df.format( pj.getTanggal()) );
             try {
-            modelHere.put("supplier", "("+ po.getKode_supplier_inpo().getKode_supplier()+") "+po.getKode_supplier_inpo().getNama_supplier() );
+            modelHere.put("pelanggan", "("+ pj.getKode_pelanggan().getKode_pelanggan()+") "+pj.getKode_pelanggan().getNama_pelanggan() );
            } catch (Exception ex) {
                
            }
            try {
-            modelHere.put("pegawai", "("+ po.getId_pegawai_inpo().getId_pegawai()+ ") " +po.getId_pegawai_inpo().getNama_pegawai());
+            modelHere.put("pegawai", "("+ pj.getId_pegawai().getId_pegawai()+ ") " +pj.getId_pegawai().getNama_pegawai());
            } catch (Exception ex) {
                
            }
            
-           List<detail_purchase_order> ldpo = po.getPo_detail();
+           List<detail_penjualan> ldpo = pj.getPenjualan_detail();
            List detailData = new ArrayList();
-           for (detail_purchase_order dpo : ldpo) {
+           for (detail_penjualan dpe : ldpo) {
                Map modelHere1 = new HashMap();
-               modelHere1.put("kode_barang",dpo.getKode_barang().getKode_barang());
-               modelHere1.put("nama_barang",dpo.getNama_barang());
-               modelHere1.put("jumlah",dpo.getJumlah());
+               modelHere1.put("kode_barang",dpe.getKode_barang().getKode_barang());
+               modelHere1.put("nama_barang",dpe.getNama_barang());
+               modelHere1.put("jumlah",dpe.getJumlah());
+               modelHere1.put("harga",dpe.getHarga());
+               modelHere1.put("diskon",dpe.getDiskon());
+               modelHere1.put("total",dpe.getTotal());
                detailData.add(modelHere1);
            }
            modelHere.put("detailData", detailData);
@@ -239,80 +268,96 @@ public class penjualanController {
     }
     
     @RequestMapping(value="penjualan/edit", method = RequestMethod.POST)
-    public String DOdataEdit(ModelMap model, HttpServletRequest request ) {  
+    public String DOdataEdit(ModelMap model, HttpServletRequest request ) { 
         String returndata = "redirect:/penjualan";
-        String no_po = request.getParameter("no_po");
-        String no_po1 = request.getParameter("no_po1");
+        String no_faktur = request.getParameter("no_faktur");
+        String no_faktur1 = request.getParameter("no_faktur1");
         String tanggal = request.getParameter("tanggal");
-        String supplier = request.getParameter("supplier");
+        String pelanggan = request.getParameter("pelanggan");
         String pegawai = request.getParameter("pegawai");
-        if (pegawai != null ) {
-            if (pegawai.length() > 0 ) {
-                pegawai = pegawai.substring((pegawai.indexOf("(")+1),pegawai.indexOf(")"));
-            }
-        }
-        if (supplier != null ) {
-            if (supplier.length() > 0 ) {
-                supplier = supplier.substring((supplier.indexOf("(")+1),supplier.indexOf(")"));
-            }
-        }
-        
+        pegawai = pegawai.substring((pegawai.indexOf("(")+1),pegawai.indexOf(")"));
+        pelanggan = pelanggan.substring((pelanggan.indexOf("(")+1),pelanggan.indexOf(")"));
         
         String[] kodeparameter =  request.getParameterValues("kodebarang");
         String[] namabarang =  request.getParameterValues("namabarang");
         String[] jumlah =  request.getParameterValues("jumlah");
+        String[] harga =  request.getParameterValues("harga");
+        String[] diskon =  request.getParameterValues("diskon");
+        String[] total =  request.getParameterValues("total");
         int lengthDAta = kodeparameter.length;
         
         
         Session session = hibernateUtil.getSessionFactory().openSession();
-        Criteria criteria = session.createCriteria(purchase_order.class);
-        criteria.add(Restrictions.eq("no_po", no_po ));
+        Criteria criteria = session.createCriteria(penjualan.class);
+        criteria.add(Restrictions.eq("no_faktur", no_faktur1 ));
         if (criteria.uniqueResult() != null) {        
             Transaction trx = session.beginTransaction();
-            purchase_order po = (purchase_order) criteria.uniqueResult();
-                        
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-            try {
-                po.setTanggal(new Timestamp(df.parse(tanggal).getTime()));
-            } catch (Exception ex) {
-                
-            }
-            po.setKode_supplier_inpo(new supplier(supplier));
-            po.setId_pegawai_inpo(new pegawai(pegawai));
-            session.save(po);
-            if (!no_po.equalsIgnoreCase(no_po1)) {
-                String sql = "update purchase_order set no_po=:kode where no_po=:kode1";
-                session.createQuery(sql).setParameter("kode", no_po)
-                        .setParameter("kode1", no_po1).executeUpdate();
-            }
-                        
-            List<detail_purchase_order> ldpo = po.getPo_detail();
-            for (detail_purchase_order dpo : ldpo) {
-                session.delete(dpo);
-            }
+            penjualan pj = (penjualan) criteria.uniqueResult();
             
-            int i = 0;
-            for (i = 0; i<lengthDAta; i++) {
-                if (kodeparameter[i].length()>0
-                        &&namabarang[i].length()>0
-                        &&jumlah[i].length()>0
-                        ) {
-                    String jmlBarang = jumlah[i].replace(".", "");
-                    try {
-                        Long jmlBarangl = Long.valueOf(jmlBarang);
-                        if (jmlBarangl>0) {
-                            detail_purchase_order dpo = new detail_purchase_order();
-                            dpo.setNo_po(po);
-                            dpo.setKode_barang(new barang(kodeparameter[i]));
-                            dpo.setNama_barang(namabarang[i]);
-                            dpo.setJumlah(jmlBarangl);
-                            session.save(dpo);
+               pj.setNo_faktur(no_faktur);
+               DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+                    pj.setTanggal(new Timestamp(df.parse(tanggal).getTime()));
+                } catch (ParseException ex) {
+                    Logger.getLogger(purchaseOrderController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                pj.setKode_pelanggan(new pelanggan(pelanggan));
+                pj.setId_pegawai(new pegawai(pegawai));
+                session.save(pj);
+                
+                if (!no_faktur.equalsIgnoreCase(no_faktur1)) {
+                    String sql = "update penjualan set no_faktur=:kode where no_faktur=:kode1";
+                    session.createQuery(sql).setParameter("kode", no_faktur)
+                            .setParameter("kode1", no_faktur1).executeUpdate();
+                }
+                
+                List<detail_penjualan> ldpe = pj.getPenjualan_detail();
+                for (detail_penjualan dpe : ldpe) {
+                    session.delete(dpe);
+                }
+
+                int i = 0;
+                for (i = 0; i<lengthDAta; i++) {
+                    if (kodeparameter[i].length()>0
+                            &&namabarang[i].length()>0
+                            &&jumlah[i].length()>0
+                            &&harga[i].length()>0
+                            &&total[i].length()>0
+                            ) {
+                        String jmlBarang = jumlah[i].replace(".", "");
+                        String hargaS = harga[i].replace(".", "");
+                        String diskonS = diskon[i].replace(".", "");
+                        String totalS = total[i].replace(".", "");
+                        try {
+                            Long jmlBarangl = Long.valueOf(jmlBarang);
+                            if (jmlBarangl>0) {
+                                detail_penjualan dpe = new detail_penjualan();
+                                dpe.setNo_faktur(pj);
+                                dpe.setKode_barang(new barang(kodeparameter[i]));
+                                dpe.setNama_barang(namabarang[i]);
+                                dpe.setJumlah(jmlBarangl);
+                                try {
+                                    dpe.setHarga(Long.valueOf(hargaS));
+                                } catch (Exception ex) {
+
+                                }
+                                try {
+                                    dpe.setDiskon(Integer.valueOf(diskonS));
+                                } catch (Exception ex) {
+
+                                }
+                                try {
+                                    dpe.setTotal(Long.valueOf(totalS));
+                                } catch (Exception ex) {
+
+                                }
+                                session.save(dpe);
+                            }
+                        } catch (Exception ex) {
+                            System.out.println(" error add po "+ex.getMessage());
                         }
-                    } catch (Exception ex) {
-                        System.out.println(" error add po "+ex.getMessage());
                     }
                 }
-            }
             trx.commit();
         }
         

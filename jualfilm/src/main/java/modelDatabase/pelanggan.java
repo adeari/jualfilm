@@ -30,6 +30,14 @@ public class pelanggan {
     
     @Column(name = "email_pelanggan", length = 200)
     private String email_pelanggan;
+    
+    public pelanggan() {
+        
+    }
+    
+    public pelanggan(String kode_pelanggan) {
+        this.kode_pelanggan = kode_pelanggan;
+    }
 
     public String getAlamat_pelanggan() {
         return alamat_pelanggan;

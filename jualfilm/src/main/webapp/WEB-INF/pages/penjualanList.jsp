@@ -28,9 +28,9 @@
 			</colgroup>
 			<thead>
 				<tr>
-					<th>Nomer PO</th>
+					<th>Nomer Faktur</th>
 					<th>Tanggal</th>
-					<th>Supplier</th>
+					<th>Pelanggan</th>
 					<th>Pegawai Entry</th>
 					<th></th>
 				</tr>
@@ -39,13 +39,13 @@
                             
                         <c:forEach items="${dataList}" var="data1">
                             <tr>
-                                <td><c:out value="${data1.no_po}"/></td>
+                                <td><c:out value="${data1.no_faktur}"/></td>
                                 <td><c:out value="${data1.tanggal}"/></td>
-                                <td><c:out value="${data1.supplier}"/></td>
+                                <td><c:out value="${data1.pelanggan}"/></td>
                                 <td><c:out value="${data1.pegawai}"/></td>
                                 <td>
-                                    <button type="button" class="btn btn-warning btedit" data-kode="${data1.no_po}">Edit</button>
-                                    <button type="button" class="btn btn-danger btdelete" data-kode="${data1.no_po}">Delete</button>
+                                    <button type="button" class="btn btn-warning btedit" data-kode="${data1.no_faktur}">Edit</button>
+                                    <button type="button" class="btn btn-danger btdelete" data-kode="${data1.no_faktur}">Delete</button>
                                 </td>
                             </tr>                    
                         </c:forEach>
@@ -73,12 +73,12 @@ function addCommas( sValue )
 $( document ).ready(function() {
     $('.btedit').click(function() {
         kode = $(this).data('kode');
-        document.location = '${baseURL}penjualanedit?kode='+kode;
+        document.location = '${baseURL}penjualan/edit?kode='+kode;
     });
     $('.btdelete').click(function() {
         kode = $(this).data('kode');
         if (confirm('Apakah kode Nota Beli '+kode+' mau di hapus ?')) {
-            document.location = '${baseURL}penjualandelete?kode='+kode;
+            document.location = '${baseURL}penjualan/delete?kode='+kode;
         }
     });
     $('.numberfilter').each(function() {

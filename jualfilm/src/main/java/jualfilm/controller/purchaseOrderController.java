@@ -267,7 +267,7 @@ public class purchaseOrderController {
         
         Session session = hibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(purchase_order.class);
-        criteria.add(Restrictions.eq("no_po", no_po ));
+        criteria.add(Restrictions.eq("no_po", no_po1 ));
         if (criteria.uniqueResult() != null) {        
             Transaction trx = session.beginTransaction();
             purchase_order po = (purchase_order) criteria.uniqueResult();
