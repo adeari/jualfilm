@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 18, 2015 at 10:26 PM
+-- Generation Time: Mar 20, 2015 at 06:12 AM
 -- Server version: 5.5.41-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.6
 
@@ -54,11 +54,19 @@ CREATE TABLE IF NOT EXISTS `detail_penjualan` (
   `no_faktur` varchar(20) NOT NULL,
   `kode_barang` varchar(20) NOT NULL,
   `nama_barang` varchar(200) NOT NULL,
-  `jumlah` bigint(20) unsigned NOT NULL,
-  `harga` bigint(20) unsigned NOT NULL,
-  `diskon` int(10) unsigned NOT NULL,
-  `total` bigint(20) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `jumlah` bigint(20) unsigned DEFAULT NULL,
+  `harga` bigint(20) unsigned DEFAULT NULL,
+  `diskon` int(10) unsigned DEFAULT NULL,
+  `total` bigint(20) unsigned DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `detail_penjualan`
+--
+
+INSERT INTO `detail_penjualan` (`kode_detail_penjualan`, `no_faktur`, `kode_barang`, `nama_barang`, `jumlah`, `harga`, `diskon`, `total`) VALUES
+(5, 'fk-2323', 'br-10', 'Jendela', 3400, 2300, 0, 7820000),
+(6, 'fk-2323', 'ob-34', 'Kursi', 56000, 4000, 50, 112000000);
 
 -- --------------------------------------------------------
 
@@ -88,10 +96,10 @@ INSERT INTO `detail_purchase_order` (`kode_detail_po`, `no_po`, `kode_barang`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `klaim_garan`
+-- Table structure for table `klaim_garansi`
 --
 
-CREATE TABLE IF NOT EXISTS `klaim_garan` (
+CREATE TABLE IF NOT EXISTS `klaim_garansi` (
   `no_klaim` varchar(20) NOT NULL,
   `tanggal` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `no_faktur` varchar(20) NOT NULL,
@@ -160,6 +168,13 @@ CREATE TABLE IF NOT EXISTS `penjualan` (
   `kode_pelanggan` varchar(20) NOT NULL,
   `id_pegawai` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `penjualan`
+--
+
+INSERT INTO `penjualan` (`no_faktur`, `tanggal`, `kode_pelanggan`, `id_pegawai`) VALUES
+('fk-2323', '2015-03-26 17:00:00', 'ko-9455', 'ph-001');
 
 -- --------------------------------------------------------
 
@@ -268,9 +283,9 @@ ALTER TABLE `detail_purchase_order`
   ADD PRIMARY KEY (`kode_detail_po`);
 
 --
--- Indexes for table `klaim_garan`
+-- Indexes for table `klaim_garansi`
 --
-ALTER TABLE `klaim_garan`
+ALTER TABLE `klaim_garansi`
   ADD PRIMARY KEY (`no_klaim`);
 
 --
@@ -317,7 +332,7 @@ ALTER TABLE `retur_penjualan`
 -- AUTO_INCREMENT for table `detail_penjualan`
 --
 ALTER TABLE `detail_penjualan`
-  MODIFY `kode_detail_penjualan` double NOT NULL AUTO_INCREMENT;
+  MODIFY `kode_detail_penjualan` double NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `detail_purchase_order`
 --

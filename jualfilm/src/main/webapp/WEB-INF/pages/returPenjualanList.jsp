@@ -9,10 +9,10 @@
 <!DOCTYPE html>
 <div class="row">
 	<div class="col-xs-8">
-		<h1>Retur Pembelian</h1>
+		<h1>Retur Penjualan</h1>
 	</div>
 	<div class="col-xs-4 text-right">
-		<a href="${baseURL}retur-pembelian/add" class="btn btn-success">Tambah Baru</a>
+		<a href="${baseURL}retur-penjualan/add" class="btn btn-success">Tambah Baru</a>
 	</div>
 </div>
 
@@ -30,7 +30,7 @@
 			</colgroup>
 			<thead>
 				<tr>
-					<th>Nomer Retur Pembelian</th>
+					<th>Nomer Retur Penjualan</th>
 					<th>Tanggal</th>
 					<th>No. PO</th>
 					<th>Pegawai</th>
@@ -64,12 +64,12 @@
 $( document ).ready(function() {
     $('.btedit').click(function() {
         kode = $(this).data('kode');
-        document.location = '${baseURL}retur-pembelian/edit?kode='+kode;
+        document.location = '${baseURL}retur-penjualan/edit?kode='+kode;
     });
     $('.btdelete').click(function() {
         kode = $(this).data('kode');
         if (confirm('Apakah kode supplier '+kode+' mau di hapus ?')) {
-            document.location = '${baseURL}retur-pembelian/delete?kode='+kode;
+            document.location = '${baseURL}retur-penjualan/delete?kode='+kode;
         }
     });
 });

@@ -8,3 +8,6 @@ input
 2. supplier
 3. pegawai
 4. barang
+3. nota beli
+4. retur pembelian
+5. penjualan
