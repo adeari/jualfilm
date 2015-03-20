@@ -282,7 +282,7 @@ $( document ).ready(function() {
         
         if (cansaved) {
             
-            $.post('${baseURL}purchase-order/validation', thisform.serialize(),function(data){
+            $.post('${baseURL}penjualan/validation', thisform.serialize(),function(data){
                 var jobj = data;
                 if (jobj.cansaved == 1) {
                     thisform.unbind();

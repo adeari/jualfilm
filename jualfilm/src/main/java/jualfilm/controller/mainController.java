@@ -10,9 +10,9 @@ import modelDatabase.barang;
 import modelDatabase.hibernateUtil;
 import modelDatabase.pegawai;
 import modelDatabase.pelanggan;
+import modelDatabase.penjualan;
 import modelDatabase.purchase_order;
 import modelDatabase.supplier;
-import org.apache.taglibs.standard.tag.common.core.ForEachSupport;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -128,6 +128,27 @@ public class mainController {
             List<pelanggan> lbarang = criteria.list();
             for (pelanggan pl : lbarang) {
                 jsonArrayy.put("("+pl.getKode_pelanggan()+") "+ pl.getNama_pelanggan() );
+            }
+        } catch (Exception ex) {
+            
+        }
+        session.close();
+        return jsonArrayy.toString();
+    }
+    
+    
+    @RequestMapping(value="penjualan.json", produces = "application/json; charset=utf-8", method = RequestMethod.GET)
+    @ResponseBody
+    public String autocompletePenjualanORder(HttpServletRequest request ) {
+        String q = request.getParameter("q");
+        Session session = hibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria( penjualan.class);        
+        criteria.add(Restrictions.like("no_faktur", q+"%").ignoreCase());
+        JSONArray jsonArrayy = new JSONArray();
+        try {
+            List<penjualan> lbarang = criteria.list();
+            for (penjualan pl : lbarang) {
+                jsonArrayy.put(pl.getNo_faktur());
             }
         } catch (Exception ex) {
             

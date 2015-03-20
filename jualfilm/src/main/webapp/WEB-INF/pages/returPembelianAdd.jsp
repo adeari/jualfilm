@@ -93,22 +93,22 @@ $( document ).ready(function() {
             msg = "Isi Pegawai";
             elemtt.focus();
         }
-        elemtt = $('#pegawai');
+        elemtt = $('#supplier');
         if (cansaved && elemtt.val().length < 1){
             cansaved = false;
-            msg = "Isi Pegawai";
+            msg = "Isi Suppplier";
             elemtt.focus();
         }
-        elemtt = $('#pegawai');
+        elemtt = $('#kode_barang');
         if (cansaved && elemtt.val().length < 1){
             cansaved = false;
-            msg = "Isi Pegawai";
+            msg = "Isi Kode Barang";
             elemtt.focus();
         }
         
         if (cansaved) {
             
-            $.post('${baseURL}supplier/validation', thisform.serialize(),function(data){
+            $.post('${baseURL}retur-pembelian/validation', thisform.serialize(),function(data){
                 var jobj = data;
                 if (jobj.cansaved == 1) {
                     thisform.unbind();
@@ -161,7 +161,7 @@ $( document ).ready(function() {
         .textext({
             plugins : '<c:if test="${empty dataEdit}">prompt </c:if>autocomplete ajax',
             <c:if test="${empty dataEdit}">
-            prompt  : 'Kode Barang',
+            prompt  : 'Kode Purchase Order',
             </c:if>
             ajax : {
                 url : '${baseURL}po.json',

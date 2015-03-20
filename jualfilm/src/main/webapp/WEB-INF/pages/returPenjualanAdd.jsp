@@ -17,9 +17,9 @@
             <form class="form-horizontal" method="post">
                 <div class="form-group" id="msg" style="background-color:yellow;text-align:center;display:none"></div>
 			<div class="form-group">
-				<label for="nomor_supplier" class="col-xs-2 control-label">Nomer Retur Pembelian</label>
+				<label for="nomor_supplier" class="col-xs-2 control-label">Nomer Retur Penjualan</label>
 				<div class="col-xs-10">
-                                    <input type="text" class="form-control" name="no_returpenjualan" id="no_returpenjualan" placeholder="Nomer Retur Pembelian"<c:if test="${!empty dataEdit}"> value="${dataEdit.no_returpenjualan}"</c:if>>
+                                    <input type="text" class="form-control" name="no_returpenjualan" id="no_returpenjualan" placeholder="Nomer Retur Penjualan"<c:if test="${!empty dataEdit}"> value="${dataEdit.no_returpenjualan}"</c:if>>
                                     <c:if test="${!empty dataEdit}"><input type="hidden" name="no_returpenjualan1" value="${dataEdit.no_returpenjualan}"></c:if>
 				</div>
 			</div>
@@ -30,9 +30,9 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="alamat" class="col-xs-2 control-label">No. Purchase Order</label>
+				<label for="alamat" class="col-xs-2 control-label">No. Faktur penjualan</label>
 				<div class="col-xs-10">
-                                    <textarea id="no_po" name="no_po" rows="1"><c:if test="${!empty dataEdit}">${dataEdit.no_po}</c:if></textarea>
+                                    <textarea id="no_faktur" name="no_faktur" rows="1"><c:if test="${!empty dataEdit}">${dataEdit.no_faktur}</c:if></textarea>
 				</div>
 			</div>
                         <div class="form-group">
@@ -42,15 +42,27 @@
 				</div>
 			</div>
                         <div class="form-group">
-				<label for="alamat" class="col-xs-2 control-label">Supplier</label>
+				<label for="alamat" class="col-xs-2 control-label">Pelanggan</label>
 				<div class="col-xs-10">
-                                    <textarea id="supplier" name="supplier" rows="1"><c:if test="${!empty dataEdit}">${dataEdit.supplier}</c:if></textarea>
+                                    <textarea id="pelanggan" name="pelanggan" rows="1"><c:if test="${!empty dataEdit}">${dataEdit.pelanggan}</c:if></textarea>
 				</div>
 			</div>
                         <div class="form-group">
 				<label for="alamat" class="col-xs-2 control-label">Kode Barang</label>
 				<div class="col-xs-10">
                                     <textarea id="kode_barang" name="kode_barang" rows="1"><c:if test="${!empty dataEdit}">${dataEdit.kode_barang}</c:if></textarea>
+				</div>
+			</div>
+                        <div class="form-group">
+				<label for="alamat" class="col-xs-2 control-label">Nama Barang</label>
+				<div class="col-xs-10">
+                                    <input type="text" class="form-control" name="nama_barang" id="nama_barang" placeholder="Nama Barang"<c:if test="${!empty dataEdit}"> value="${dataEdit.nama_barang}"</c:if>>
+				</div>
+			</div>
+                        <div class="form-group">
+				<label for="alamat" class="col-xs-2 control-label">Jumlah</label>
+				<div class="col-xs-10">
+                                    <p><input type="text" class="form-control text-right numberfilter" id="jumlah" name="jumlah" style="width:130px" <c:if test="${!empty dataEdit}"> value="${dataEdit.jumlah}"</c:if><c:if test="${empty dataEdit}"> value="0"</c:if>></p>
 				</div>
 			</div>
                         <div class="form-group">
@@ -63,6 +75,21 @@
 </div>
 <%@include file="/WEB-INF/layout/footer.jsp" %>
 <script>
+function addCommas( sValue ) 
+{
+    if (sValue.length > 0 ) {
+    sValue = sValue.replace(/[#.]/g,'');
+    sValue = sValue.replace(/[^0-9\.]/g,'');
+    sValue1 = parseFloat(sValue);
+    sValue = sValue1.toString();
+        var sRegExp = new RegExp('(-?[0-9]+)([0-9]{3})');
+
+        while(sRegExp.test(sValue)) {
+            sValue = sValue.replace(sRegExp, '$1.$2');
+        }
+    }
+    return sValue;
+}
 $( document ).ready(function() {
     $('.form-horizontal').submit(function(e) {
         e.preventDefault();
@@ -72,7 +99,7 @@ $( document ).ready(function() {
         elemtt = $('#no_returpenjualan');
         if (cansaved && elemtt.val().length < 1){
             cansaved = false;
-            msg = "Isi Nomor Retur Pembelian";
+            msg = "Isi Nomor Retur Penjualan";
             elemtt.focus();
         }
         elemtt = $('#tanggal');
@@ -81,22 +108,10 @@ $( document ).ready(function() {
             msg = "Isi Tanggal";
             elemtt.focus();
         }
-        elemtt = $('#no_po');
+        elemtt = $('#no_faktur');
         if (cansaved && elemtt.val().length < 1){
             cansaved = false;
-            msg = "Isi No. Purchase Order";
-            elemtt.focus();
-        }
-        elemtt = $('#pegawai');
-        if (cansaved && elemtt.val().length < 1){
-            cansaved = false;
-            msg = "Isi Pegawai";
-            elemtt.focus();
-        }
-        elemtt = $('#pegawai');
-        if (cansaved && elemtt.val().length < 1){
-            cansaved = false;
-            msg = "Isi Pegawai";
+            msg = "Isi No. Faktur Penjualan";
             elemtt.focus();
         }
         elemtt = $('#pegawai');
@@ -106,9 +121,28 @@ $( document ).ready(function() {
             elemtt.focus();
         }
         
+        elemtt = $('#pelanggan');
+        if (cansaved && elemtt.val().length < 1){
+            cansaved = false;
+            msg = "Isi Pelanggan";
+            elemtt.focus();
+        }
+        elemtt = $('#kode_barang');
+        if (cansaved && elemtt.val().length < 1){
+            cansaved = false;
+            msg = "Isi Kode Barang";
+            elemtt.focus();
+        }
+        elemtt = $('#jumlah');
+        if (cansaved && elemtt.val().length < 1){
+            cansaved = false;
+            msg = "Isi Jumlah";
+            elemtt.focus();
+        }
+        
         if (cansaved) {
             
-            $.post('${baseURL}supplier/validation', thisform.serialize(),function(data){
+            $.post('${baseURL}retur-penjualan/validation', thisform.serialize(),function(data){
                 var jobj = data;
                 if (jobj.cansaved == 1) {
                     thisform.unbind();
@@ -124,14 +158,14 @@ $( document ).ready(function() {
         }
     });
     
-    $('#supplier')
+    $('#pelanggan')
         .textext({
             plugins : '<c:if test="${empty dataEdit}">prompt </c:if>autocomplete ajax',
             <c:if test="${empty dataEdit}">
-            prompt  : 'Supplier',
+            prompt  : 'Pelanggan',
             </c:if>
             ajax : {
-                url : '${baseURL}supplier.json',
+                url : '${baseURL}pelanggan.json',
                 dataType : 'json'                
             }
         });
@@ -155,16 +189,45 @@ $( document ).ready(function() {
             ajax : {
                 url : '${baseURL}barang.json',
                 dataType : 'json'                
+            },
+ext: {
+    core: {
+        trigger: function()
+        {
+            
+            if (arguments[0]=='setInputData') {
+                if (arguments[1].length>0) {
+                    if (arguments[1].substr(0,1) == '(') {
+                        strdata = arguments[1].substr(1);
+                        posisitutupkurung = 0;
+                        lengthstr = strdata.length;
+                        i = 0;
+                        ketemu = false;
+                        while (!ketemu && i<lengthstr) {
+                            str1kata = strdata.substr(i,1);
+                            if (str1kata == ')') {
+                                ketemu = true;
+                            } else {
+                                i++;
+                            }
+                        }
+                        $('#nama_barang').val(strdata.substr(i+2));
+                    }
+                }
             }
+            $.fn.textext.TextExt.prototype.trigger.apply(this, arguments);
+        }
+    }
+}
         });
-    $('#no_po')
+    $('#no_faktur')
         .textext({
             plugins : '<c:if test="${empty dataEdit}">prompt </c:if>autocomplete ajax',
             <c:if test="${empty dataEdit}">
-            prompt  : 'Kode Barang',
+            prompt  : 'Nome Faktur Penjualan',
             </c:if>
             ajax : {
-                url : '${baseURL}po.json',
+                url : '${baseURL}penjualan.json',
                 dataType : 'json'                
             }
         });
@@ -179,6 +242,12 @@ $( document ).ready(function() {
         if (event.keyCode == 13) {
             $('.form-horizontal').submit();
          }
+    });
+    $('.numberfilter').each(function() {
+        $(this).val(addCommas($(this).val()));
+    });
+    $('body').on('keyup','.numberfilter',function(e) {
+        $(this).val(addCommas($(this).val()));
     });
 });
 </script>

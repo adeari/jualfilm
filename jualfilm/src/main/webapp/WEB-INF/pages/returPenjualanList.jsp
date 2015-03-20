@@ -27,15 +27,17 @@
 				<col width="100" />
 				<col width="100" />
                                 <col width="100" />
+                                <col width="100" />
 			</colgroup>
 			<thead>
 				<tr>
 					<th>Nomer Retur Penjualan</th>
 					<th>Tanggal</th>
-					<th>No. PO</th>
+					<th>No. Faktur Penjualan</th>
 					<th>Pegawai</th>
 					<th>Supplier</th>
                                         <th>Barang</th>
+                                        <th>Jumlah</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -43,15 +45,16 @@
                             
                         <c:forEach items="${dataList}" var="data1">
                             <tr>
-                                <td><c:out value="${data1.no_retur_pembelian}"/></td>
+                                <td><c:out value="${data1.no_retur_penjualan}"/></td>
                                 <td><c:out value="${data1.tanggal}"/></td>
-                                <td><c:out value="${data1.no_po}"/></td>
+                                <td><c:out value="${data1.no_faktur}"/></td>
                                 <td><c:out value="${data1.pegawai}"/></td>
-                                <td><c:out value="${data1.supplier}"/></td>
+                                <td><c:out value="${data1.pelanggan}"/></td>
                                 <td><c:out value="${data1.barang}"/></td>
+                                <td class=""numberfilter><c:out value="${data1.jumlah}"/></td>
                                 <td>
-                                    <button type="button" class="btn btn-warning btedit" data-kode="${data1.no_retur_pembelian}">Edit</button>
-                                    <button type="button" class="btn btn-danger btdelete" data-kode="${data1.no_retur_pembelian}">Delete</button>
+                                    <button type="button" class="btn btn-warning btedit" data-kode="${data1.no_retur_penjualan}">Edit</button>
+                                    <button type="button" class="btn btn-danger btdelete" data-kode="${data1.no_retur_penjualan}">Delete</button>
                                 </td>
                             </tr>                    
                         </c:forEach>
