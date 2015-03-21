@@ -68,7 +68,7 @@ $( document ).ready(function() {
     });
     $('.btdelete').click(function() {
         kode = $(this).data('kode');
-        if (confirm('Apakah kode supplier '+kode+' mau di hapus ?')) {
+        if (confirm('Apakah kode Retur Pembelian '+kode+' mau di hapus ?')) {
             document.location = '${baseURL}retur-pembelian/delete?kode='+kode;
         }
     });
