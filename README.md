@@ -11,3 +11,5 @@ input
 3. nota beli
 4. retur pembelian
 5. penjualan
+6. retur penjualan
+7. klaim garansi
