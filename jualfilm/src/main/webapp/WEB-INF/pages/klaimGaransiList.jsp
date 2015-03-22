@@ -35,7 +35,7 @@
 					<th>No. Faktur Penjualan</th>
 					<th>Pelanggan</th>
                                         <th>Barang</th>
-                                        <th>Jumlah</th>
+                                        <th style="text-align: right">Jumlah</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -48,7 +48,7 @@
                                 <td><c:out value="${data1.no_faktur}"/></td>
                                 <td><c:out value="${data1.pelanggan}"/></td>
                                 <td><c:out value="${data1.barang}"/></td>
-                                <td class=""numberfilter><c:out value="${data1.jumlah}"/></td>
+                                <td class="numberfilter" align="right"><c:out value="${data1.jumlah}"/></td>
                                 <td>
                                     <button type="button" class="btn btn-warning btedit" data-kode="${data1.no_klaim}">Edit</button>
                                     <button type="button" class="btn btn-danger btdelete" data-kode="${data1.no_klaim}">Delete</button>
@@ -61,6 +61,21 @@
 </div>
 <%@include file="/WEB-INF/layout/footer.jsp" %>
 <script>
+function addCommas( sValue ) 
+{
+    if (sValue.length > 0 ) {
+    sValue = sValue.replace(/[#.]/g,'');
+    sValue = sValue.replace(/[^0-9\.]/g,'');
+    sValue1 = parseFloat(sValue);
+    sValue = sValue1.toString();
+        var sRegExp = new RegExp('(-?[0-9]+)([0-9]{3})');
+
+        while(sRegExp.test(sValue)) {
+            sValue = sValue.replace(sRegExp, '$1.$2');
+        }
+    }
+    return sValue;
+}
 $( document ).ready(function() {
     $('.btedit').click(function() {
         kode = $(this).data('kode');
@@ -71,6 +86,9 @@ $( document ).ready(function() {
         if (confirm('Apakah kode Klaim Garansi '+kode+' mau di hapus ?')) {
             document.location = '${baseURL}klaimgaransi/delete?kode='+kode;
         }
+    });
+    $('.numberfilter').each(function() {
+        $(this).text(addCommas($(this).text()));
     });
 });
 </script>
