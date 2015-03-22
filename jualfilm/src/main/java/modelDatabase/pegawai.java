@@ -4,6 +4,10 @@
  */
 package modelDatabase;
 
+import java.io.Serializable;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
@@ -14,8 +18,12 @@ import javax.persistence.Column;
  */
 @Entity
 @Table(name = "pegawai")
-public class pegawai {
+public class pegawai implements Serializable {
     @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id", unique = true, nullable = false, length = 20)
+    private Integer id;
+    
     @Column(name = "id_pegawai", unique = true, nullable = false, length = 20)
     private String id_pegawai;
     
@@ -90,5 +98,14 @@ public class pegawai {
     public void setDivisi(String divisi) {
         this.divisi = divisi;
     }
-   
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+ 
+    
 }

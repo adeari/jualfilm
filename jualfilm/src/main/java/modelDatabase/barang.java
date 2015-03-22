@@ -4,18 +4,25 @@
  */
 package modelDatabase;
 
+import java.io.Serializable;
+import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
 /**
  *
  * @author ade
  */
 @Entity
 @Table(name = "barang")
-public class barang {
+public class barang implements Serializable {
     @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id", unique = true, nullable = false, length = 20)
+    private Integer id;
+    
     @Column(name = "kode_barang", unique = true, nullable = false, length = 20)
     private String kode_barang;
     
@@ -67,6 +74,14 @@ public class barang {
 
     public void setJumlah_stok(Long jumlah_stok) {
         this.jumlah_stok = jumlah_stok;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
    
 }

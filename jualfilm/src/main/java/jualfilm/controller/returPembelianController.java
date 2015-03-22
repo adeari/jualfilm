@@ -35,6 +35,11 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.json.JSONObject;
+
+
+import java.util.HashMap;
+import java.util.Map;
+import org.hibernate.criterion.Order;
 /**
  *
  * @author ade
@@ -92,7 +97,25 @@ public class returPembelianController {
     
     @RequestMapping(value="retur-pembelian/add", method = RequestMethod.GET)
     public String dataAdd(ModelMap model) {  
-        model.addAttribute("headerapps", "Retur Pembelian Baru");        
+        model.addAttribute("headerapps", "Retur Pembelian Baru");
+        
+        Map mapDAta = new HashMap();
+        Session session = hibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(retur_pembelian.class).setProjection(Projections.property("id"));
+        criteria.addOrder(Order.desc("id"));
+        criteria.setMaxResults(1);
+        String kodedata = "RPO-0001";
+        if (criteria.uniqueResult() != null ) {
+            kodedata = String.valueOf(Integer.valueOf(criteria.uniqueResult().toString())+1);
+            while (kodedata.length() < 4) {
+                kodedata = "0"+kodedata;
+            }
+            kodedata = "RPO-"+kodedata;
+        }
+        mapDAta.put("no_retur_pembelian", kodedata);
+        model.addAttribute("dataEdit", mapDAta);
+        session.close();
+        
         return "returPembelianAdd";
     }
     
@@ -139,13 +162,42 @@ public class returPembelianController {
         }
         
         Session session = hibernateUtil.getSessionFactory().openSession();
+        
+        purchase_order purchase_orderIn = new purchase_order();
+        Criteria criteria = session.createCriteria(purchase_order.class);
+        criteria.add(Restrictions.eq("no_po", no_po));
+        if ( criteria .uniqueResult() != null) {
+            purchase_orderIn = (purchase_order) criteria .uniqueResult();
+        }
+        
+        supplier supplierIn = new supplier();
+        criteria = session.createCriteria(supplier.class);
+        criteria.add(Restrictions.eq("kode_supplier", supplier));
+        if ( criteria .uniqueResult() != null) {
+            supplierIn = (supplier) criteria .uniqueResult();
+        }
+        
+        pegawai pegawaiIn = new pegawai();
+        criteria = session.createCriteria(pegawai.class);
+        criteria.add(Restrictions.eq("id_pegawai", pegawai));
+        if ( criteria .uniqueResult() != null) {
+            pegawaiIn = (pegawai) criteria .uniqueResult();
+        }
+        
+        barang barangIn = new barang();
+        criteria = session.createCriteria(barang.class);
+        criteria.add(Restrictions.eq("kode_barang", kode_barang));
+        if ( criteria .uniqueResult() != null) {
+            barangIn = (barang) criteria .uniqueResult();
+        }
+        
         Transaction trx = session.beginTransaction();
         
         retur_pembelian rpp = new retur_pembelian();
-        rpp.setId_pegawai(new pegawai(pegawai));
-        rpp.setKode_barang(new barang(kode_barang));
-        rpp.setKode_supplier(new supplier(supplier));
-        rpp.setNo_po(new purchase_order(no_po));
+        rpp.setId_pegawai(pegawaiIn);
+        rpp.setKode_barang(barangIn);
+        rpp.setKode_supplier(supplierIn);
+        rpp.setNo_po(purchase_orderIn);
         rpp.setNo_retur_pembelian(no_retur_pembelian);
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         try {
@@ -252,14 +304,12 @@ public class returPembelianController {
                 
             }
         }
-        System.out.println(" no_po "+no_po);
         String pegawai = request.getParameter("pegawai");
         if (pegawai != null ) {
             if (pegawai.length() > 0 ) {
                 pegawai = pegawai.substring((pegawai.indexOf("(")+1),pegawai.indexOf(")"));
             }
         }
-        System.out.println(" pegawai "+pegawai);
         String supplier = request.getParameter("supplier");
         if (supplier != null ) {
             if (supplier.length() > 0 ) {
@@ -267,7 +317,6 @@ public class returPembelianController {
             }
         }
         
-        System.out.println(" supplier "+supplier);
         
         String kode_barang = request.getParameter("kode_barang");
         if (kode_barang != null ) {
@@ -276,20 +325,48 @@ public class returPembelianController {
             }
         }
         
-        System.out.println(" kode_barang "+kode_barang);
         
         
         Session session = hibernateUtil.getSessionFactory().openSession();
-        Criteria criteria = session.createCriteria(retur_pembelian.class);
+        
+        purchase_order purchase_orderIn = new purchase_order();
+        Criteria criteria = session.createCriteria(purchase_order.class);
+        criteria.add(Restrictions.eq("no_po", no_po));
+        if ( criteria .uniqueResult() != null) {
+            purchase_orderIn = (purchase_order) criteria .uniqueResult();
+        }
+        
+        supplier supplierIn = new supplier();
+        criteria = session.createCriteria(supplier.class);
+        criteria.add(Restrictions.eq("kode_supplier", supplier));
+        if ( criteria .uniqueResult() != null) {
+            supplierIn = (supplier) criteria .uniqueResult();
+        }
+        
+        pegawai pegawaiIn = new pegawai();
+        criteria = session.createCriteria(pegawai.class);
+        criteria.add(Restrictions.eq("id_pegawai", pegawai));
+        if ( criteria .uniqueResult() != null) {
+            pegawaiIn = (pegawai) criteria .uniqueResult();
+        }
+        
+        barang barangIn = new barang();
+        criteria = session.createCriteria(barang.class);
+        criteria.add(Restrictions.eq("kode_barang", kode_barang));
+        if ( criteria .uniqueResult() != null) {
+            barangIn = (barang) criteria .uniqueResult();
+        }
+        
+        criteria = session.createCriteria(retur_pembelian.class);
         criteria.add(Restrictions.eq("no_retur_pembelian", no_retur_pembelian1 ));
         if (criteria.uniqueResult() != null) {        
             Transaction trx = session.beginTransaction();
             retur_pembelian rpp = (retur_pembelian) criteria.uniqueResult();
             
-            rpp.setId_pegawai(new pegawai(pegawai));
-            rpp.setKode_barang(new barang(kode_barang));
-            rpp.setKode_supplier(new supplier(supplier));
-            rpp.setNo_po(new purchase_order(no_po));
+            rpp.setId_pegawai(pegawaiIn);
+            rpp.setKode_barang(barangIn);
+            rpp.setKode_supplier(supplierIn);
+            rpp.setNo_po(purchase_orderIn);
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
             try {
                 rpp.setTanggal(new Timestamp(df.parse(tanggal).getTime()));

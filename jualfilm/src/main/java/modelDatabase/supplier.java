@@ -8,6 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.Column;
+
+
+import java.io.Serializable;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
 /**
  *
  * @author ade
@@ -16,6 +21,10 @@ import javax.persistence.Column;
 @Table(name = "supplier")
 public class supplier {
     @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id", unique = true, nullable = false, length = 20)
+    private Integer id;
+    
     @Column(name = "kode_supplier", unique = true, nullable = false, length = 20)
     private String kode_supplier;
     
@@ -78,4 +87,11 @@ public class supplier {
         this.telepon_supplier = telepon_supplier;
     }
    
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

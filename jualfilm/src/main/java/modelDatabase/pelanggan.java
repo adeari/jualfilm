@@ -8,14 +8,22 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.Column;
+
+import java.io.Serializable;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
 /**
  *
  * @author ade
  */
 @Entity
 @Table(name = "pelanggan")
-public class pelanggan {
+public class pelanggan implements Serializable {
     @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id", unique = true, nullable = false, length = 20)
+    private Integer id;
+    
     @Column(name = "kode_pelanggan", unique = true, nullable = false, length = 20)
     private String kode_pelanggan;
     
@@ -77,6 +85,14 @@ public class pelanggan {
 
     public void setTelepon_pelanggan(String telepon_pelanggan) {
         this.telepon_pelanggan = telepon_pelanggan;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
    
 }

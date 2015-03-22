@@ -4,6 +4,10 @@
  */
 package modelDatabase;
 
+import java.io.Serializable;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.sql.Timestamp;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -17,8 +21,12 @@ import javax.persistence.OneToOne;
  */
 @Entity
 @Table(name = "klaim_garansi")
-public class klaim_garansi {
+public class klaim_garansi implements Serializable {
     @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id", unique = true, nullable = false, length = 20)
+    private Integer id;
+    
     @Column(name = "no_klaim", unique = true, nullable = false, length = 20)
     private String no_klaim;
     
@@ -89,6 +97,14 @@ public class klaim_garansi {
 
     public void setNo_klaim(String no_klaim) {
         this.no_klaim = no_klaim;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
 }

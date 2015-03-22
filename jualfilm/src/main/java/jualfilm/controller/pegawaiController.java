@@ -24,6 +24,12 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.json.JSONObject;
+
+
+import java.util.HashMap;
+import java.util.Map;
+import org.hibernate.criterion.Order;
+
 /**
  *
  * @author ade
@@ -55,7 +61,25 @@ public class pegawaiController {
     
     @RequestMapping(value="pegawai/add", method = RequestMethod.GET)
     public String dataAdd(ModelMap model) {  
-        model.addAttribute("headerapps", "Pegawai Baru");        
+        model.addAttribute("headerapps", "Pegawai Baru");
+        
+        Map mapDAta = new HashMap();
+        Session session = hibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(pegawai.class).setProjection(Projections.property("id"));
+        criteria.addOrder(Order.desc("id"));
+        criteria.setMaxResults(1);
+        String kodedata = "Emp-0001";
+        if (criteria.uniqueResult() != null ) {
+            kodedata = String.valueOf(Integer.valueOf(criteria.uniqueResult().toString())+1);
+            while (kodedata.length() < 4) {
+                kodedata = "0"+kodedata;
+            }
+            kodedata = "Emp-"+kodedata;
+            mapDAta.put("id_pegawai", kodedata);
+        }
+        model.addAttribute("dataEdit", mapDAta);
+        session.close();
+        
         return "pegawaiAdd";
     }
     
@@ -158,14 +182,9 @@ public class pegawaiController {
             pegawai1.setTelepon_pegawai(telp);
             pegawai1.setEmail_pegawai(email);
             pegawai1.setDivisi(divisi);
+            pegawai1.setId_pegawai(kodepegawai);
             
             session.update(pegawai1);
-            
-            if (!kodepegawai1.equalsIgnoreCase(kodepegawai)) {
-                String sql = "update pegawai set id_pegawai=:kode where id_pegawai=:kode1";
-                session.createQuery(sql).setParameter("kode", kodepegawai)
-                        .setParameter("kode1", kodepegawai1).executeUpdate();
-            }
             trx.commit();
         }
         

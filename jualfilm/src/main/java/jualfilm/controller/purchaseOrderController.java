@@ -39,6 +39,11 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.json.JSONObject;
+
+
+import java.util.HashMap;
+import java.util.Map;
+import org.hibernate.criterion.Order;
 /**
  *
  * @author ade
@@ -103,7 +108,25 @@ public class purchaseOrderController {
     
     @RequestMapping(value="purchase-order/add", method = RequestMethod.GET)
     public String dataAdd(ModelMap model) {  
-        model.addAttribute("headerapps", "Nota Beli Baru");        
+        model.addAttribute("headerapps", "Nota Beli Baru");
+        
+        Map mapDAta = new HashMap();
+        Session session = hibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(purchase_order.class).setProjection(Projections.property("id"));
+        criteria.addOrder(Order.desc("id"));
+        criteria.setMaxResults(1);
+        String kodedata = "PO-0001";
+        if (criteria.uniqueResult() != null ) {
+            kodedata = String.valueOf(Integer.valueOf(criteria.uniqueResult().toString())+1);
+            while (kodedata.length() < 4) {
+                kodedata = "0"+kodedata;
+            }
+            kodedata = "PO-"+kodedata;
+        }
+        mapDAta.put("no_po", kodedata);
+        model.addAttribute("dataEdit", mapDAta);
+        session.close();
+        
         return "purchaseOrderAdd";
     }
     
@@ -122,6 +145,20 @@ public class purchaseOrderController {
         int lengthDAta = kodeparameter.length;
         
         Session session = hibernateUtil.getSessionFactory().openSession();
+        supplier supplierIn = new supplier();
+        Criteria criteria = session.createCriteria(supplier.class);
+        criteria.add(Restrictions.eq("kode_supplier", supplier));
+        if ( criteria .uniqueResult() != null) {
+            supplierIn = (supplier) criteria .uniqueResult();
+        }
+        
+        pegawai pegawaiIn = new pegawai();
+        criteria = session.createCriteria(pegawai.class);
+        criteria.add(Restrictions.eq("id_pegawai", pegawai));
+        if ( criteria .uniqueResult() != null) {
+            pegawaiIn = (pegawai) criteria .uniqueResult();
+        }
+        
         Transaction trx = session.beginTransaction();
         
        purchase_order po = new purchase_order();
@@ -132,8 +169,8 @@ public class purchaseOrderController {
         } catch (ParseException ex) {
             Logger.getLogger(purchaseOrderController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        po.setKode_supplier_inpo(new supplier(supplier));
-        po.setId_pegawai_inpo(new pegawai(pegawai));
+        po.setKode_supplier_inpo(supplierIn);
+        po.setId_pegawai_inpo(pegawaiIn);
         session.save(po);
                 
         int i = 0;
@@ -148,7 +185,15 @@ public class purchaseOrderController {
                     if (jmlBarangl>0) {
                         detail_purchase_order dpo = new detail_purchase_order();
                         dpo.setNo_po(po);
-                        dpo.setKode_barang(new barang(kodeparameter[i]));
+                        
+                        barang barangIn = new barang();
+                        criteria = session.createCriteria(barang.class);
+                        criteria.add(Restrictions.eq("kode_barang", kodeparameter[i]));
+                        if ( criteria .uniqueResult() != null) {
+                            barangIn = (barang) criteria .uniqueResult();
+                        }
+                        
+                        dpo.setKode_barang(barangIn);
                         dpo.setNama_barang(namabarang[i]);
                         dpo.setJumlah(jmlBarangl);
                         session.save(dpo);
@@ -266,7 +311,23 @@ public class purchaseOrderController {
         
         
         Session session = hibernateUtil.getSessionFactory().openSession();
-        Criteria criteria = session.createCriteria(purchase_order.class);
+        
+        supplier supplierIn = new supplier();
+        Criteria criteria = session.createCriteria(supplier.class);
+        criteria.add(Restrictions.eq("kode_supplier", supplier));
+        if ( criteria .uniqueResult() != null) {
+            supplierIn = (supplier) criteria .uniqueResult();
+        }
+        
+        pegawai pegawaiIn = new pegawai();
+        criteria = session.createCriteria(pegawai.class);
+        criteria.add(Restrictions.eq("id_pegawai", pegawai));
+        if ( criteria .uniqueResult() != null) {
+            pegawaiIn = (pegawai) criteria .uniqueResult();
+        }
+        
+        
+        criteria = session.createCriteria(purchase_order.class);
         criteria.add(Restrictions.eq("no_po", no_po1 ));
         if (criteria.uniqueResult() != null) {        
             Transaction trx = session.beginTransaction();
@@ -278,8 +339,8 @@ public class purchaseOrderController {
             } catch (Exception ex) {
                 
             }
-            po.setKode_supplier_inpo(new supplier(supplier));
-            po.setId_pegawai_inpo(new pegawai(pegawai));
+            po.setKode_supplier_inpo(supplierIn);
+            po.setId_pegawai_inpo(pegawaiIn);
             session.save(po);
             if (!no_po.equalsIgnoreCase(no_po1)) {
                 String sql = "update purchase_order set no_po=:kode where no_po=:kode1";
@@ -304,7 +365,15 @@ public class purchaseOrderController {
                         if (jmlBarangl>0) {
                             detail_purchase_order dpo = new detail_purchase_order();
                             dpo.setNo_po(po);
-                            dpo.setKode_barang(new barang(kodeparameter[i]));
+                            
+                            barang barangIn = new barang();
+                            criteria = session.createCriteria(barang.class);
+                            criteria.add(Restrictions.eq("kode_barang", kodeparameter[i]));
+                            if ( criteria .uniqueResult() != null) {
+                                barangIn = (barang) criteria .uniqueResult();
+                            }
+                            
+                            dpo.setKode_barang(barangIn);
                             dpo.setNama_barang(namabarang[i]);
                             dpo.setJumlah(jmlBarangl);
                             session.save(dpo);

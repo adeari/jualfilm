@@ -114,5 +114,8 @@ $( document ).ready(function() {
     }).keyup(function(event) {
         $(this).val(addCommas($(this).val()));
     }); 
+    $('.numberfilter').each(function() {
+        $(this).val(addCommas($(this).val()));
+    });
 });
 </script>

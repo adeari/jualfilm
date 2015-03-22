@@ -32,7 +32,7 @@ public class detail_purchase_order implements Serializable {
     private purchase_order no_po;
     
     @OneToOne
-    @JoinColumn(name="kode_barang")
+    @JoinColumn(name="id_barang")
     private barang kode_barang;
     
     @Column(name = "nama_barang")

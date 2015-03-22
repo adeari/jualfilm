@@ -11,14 +11,23 @@ import javax.persistence.Id;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+
+import java.io.Serializable;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
+
 /**
  *
  * @author ade
  */
 @Entity
 @Table(name = "retur_pembelian")
-public class retur_pembelian {
+public class retur_pembelian implements Serializable {
     @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id", unique = true, nullable = false, length = 20)
+    private Integer id;
+    
     @Column(name = "no_retur_pembelian", unique = true, nullable = false, length = 20)
     private String no_retur_pembelian;
     
@@ -26,7 +35,7 @@ public class retur_pembelian {
     private Timestamp tanggal;
     
     @OneToOne
-    @JoinColumn(name="no_po")
+    @JoinColumn(name="id_po")
     private purchase_order no_po;
     
     @OneToOne
@@ -34,12 +43,12 @@ public class retur_pembelian {
     private pegawai id_pegawai;
     
     @OneToOne
-    @JoinColumn(name="kode_supplier")
+    @JoinColumn(name="id_supplier")
     private supplier kode_supplier;
     
     
     @OneToOne
-    @JoinColumn(name="kode_barang")
+    @JoinColumn(name="id_barang")
     private barang kode_barang;
 
     public pegawai getId_pegawai() {

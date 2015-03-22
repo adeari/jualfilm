@@ -24,6 +24,10 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+import org.hibernate.criterion.Order;
 /**
  *
  * @author ade
@@ -55,7 +59,25 @@ public class supplierController {
     
     @RequestMapping(value="supplier/add", method = RequestMethod.GET)
     public String dataAdd(ModelMap model) {  
-        model.addAttribute("headerapps", "Supplier Baru");        
+        model.addAttribute("headerapps", "Supplier Baru");
+        
+        Map mapDAta = new HashMap();
+        Session session = hibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(supplier.class).setProjection(Projections.property("id"));
+        criteria.addOrder(Order.desc("id"));
+        criteria.setMaxResults(1);
+        String kodedata = "Sup-0001";
+        if (criteria.uniqueResult() != null ) {
+            kodedata = String.valueOf(Integer.valueOf(criteria.uniqueResult().toString())+1);
+            while (kodedata.length() < 4) {
+                kodedata = "0"+kodedata;
+            }
+            kodedata = "Sup-"+kodedata;
+        }
+        mapDAta.put("kode_supplier", kodedata);
+        model.addAttribute("dataEdit", mapDAta);
+        session.close();
+        
         return "supplierAdd";
     }
     

@@ -5,6 +5,8 @@
 package jualfilm.controller;
 
 
+import java.util.HashMap;
+import java.util.Map;
 import modelDatabase.hibernateUtil;
 import javax.servlet.http.HttpServletRequest;
 import modelDatabase.barang;
@@ -24,6 +26,8 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.json.JSONObject;
+
+import org.hibernate.criterion.Order;
 /**
  *
  * @author ade
@@ -55,7 +59,23 @@ public class barangController {
     
     @RequestMapping(value="barang/add", method = RequestMethod.GET)
     public String dataAdd(ModelMap model) {  
-        model.addAttribute("headerapps", "Barang Baru");        
+        Map mapDAta = new HashMap();
+        model.addAttribute("headerapps", "Barang Baru");
+        Session session = hibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(barang.class).setProjection(Projections.property("id"));
+        criteria.addOrder(Order.desc("id"));
+        criteria.setMaxResults(1);
+        String kodedata = "Item-0001";
+        if (criteria.uniqueResult() != null ) {
+            kodedata = String.valueOf(Integer.valueOf(criteria.uniqueResult().toString())+1);
+            while (kodedata.length() < 4) {
+                kodedata = "0"+kodedata;
+            }
+            kodedata = "Item-"+kodedata;
+        }
+        mapDAta.put("kode_barang", kodedata);
+        model.addAttribute("dataEdit", mapDAta);
+        session.close();
         return "barangAdd";
     }
     
@@ -170,14 +190,9 @@ public class barangController {
             barang1.setNama_barang(nama);
             barang1.setHarga(Long.valueOf(harga));
             barang1.setJumlah_stok(Long.valueOf(jumlah_stok));
+            barang1.setKode_barang(kodebarang);
             
             session.update(barang1);
-            
-            if (!kodebarang1.equalsIgnoreCase(kodebarang)) {
-                String sql = "update barang set kode_barang=:kode where kode_barang=:kode1";
-                session.createQuery(sql).setParameter("kode", kodebarang)
-                        .setParameter("kode1", kodebarang1).executeUpdate();
-            }
             trx.commit();
         }
         

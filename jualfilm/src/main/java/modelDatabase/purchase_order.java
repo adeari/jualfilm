@@ -14,6 +14,10 @@ import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import java.io.Serializable;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
 /**
  *
  * @author ade
@@ -22,6 +26,10 @@ import javax.persistence.OneToOne;
 @Table(name = "purchase_order")
 public class purchase_order {
     @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id", unique = true, nullable = false, length = 20)
+    private Integer id;
+    
     @Column(name = "no_po", unique = true, nullable = false, length = 20)
     private String no_po;
     
@@ -29,7 +37,7 @@ public class purchase_order {
     private Timestamp tanggal;
     
     @OneToOne
-    @JoinColumn(name="kode_supplier")
+    @JoinColumn(name="id_supplier")
     private supplier kode_supplier_inpo;
         
     @OneToOne

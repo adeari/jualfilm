@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class mainController {
     @RequestMapping(value="/", method = RequestMethod.GET)
     public String index() {              
-        return "redirect:/purchase-order";
+        return "redirect:/penjualan";
     }
     
     @RequestMapping(value="supplier.json", produces = "application/json; charset=utf-8", method = RequestMethod.GET)

@@ -25,6 +25,10 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+import org.hibernate.criterion.Order;
 /**
  *
  * @author ade
@@ -55,8 +59,26 @@ public class pelangganController {
     }
     
     @RequestMapping(value="pelanggan/add", method = RequestMethod.GET)
-    public String dataAdd(ModelMap model) {  
-        model.addAttribute("headerapps", "Pelanggan Baru");        
+    public String dataAdd(ModelMap model) {
+        Map mapDAta = new HashMap();
+        model.addAttribute("headerapps", "Pelanggan Baru");
+        
+        Session session = hibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(pelanggan.class).setProjection(Projections.property("id"));
+        criteria.addOrder(Order.desc("id"));
+        criteria.setMaxResults(1);
+        String kodedata = "Cust-0001";
+        if (criteria.uniqueResult() != null ) {
+            kodedata = String.valueOf(Integer.valueOf(criteria.uniqueResult().toString())+1);
+            while (kodedata.length() < 4) {
+                kodedata = "0"+kodedata;
+            }
+            kodedata = "Cust-"+kodedata;
+        }
+        mapDAta.put("kode_pelanggan", kodedata);
+        model.addAttribute("dataEdit", mapDAta);
+        session.close();
+        
         return "pelangganAdd";
     }
     
