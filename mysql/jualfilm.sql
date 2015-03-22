@@ -1,343 +1,245 @@
--- phpMyAdmin SQL Dump
--- version 4.3.6
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: Mar 20, 2015 at 06:12 AM
--- Server version: 5.5.41-0ubuntu0.14.04.1
--- PHP Version: 5.5.9-1ubuntu4.6
+/*
+Navicat MySQL Data Transfer
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
+Source Server         : mysqlku
+Source Server Version : 50617
+Source Host           : localhost:3306
+Source Database       : jualfilm
 
+Target Server Type    : MYSQL
+Target Server Version : 50617
+File Encoding         : 65001
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+Date: 2015-03-23 05:26:47
+*/
 
---
--- Database: `jualfilm`
---
+SET FOREIGN_KEY_CHECKS=0;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `barang`
---
-
-CREATE TABLE IF NOT EXISTS `barang` (
+-- ----------------------------
+-- Table structure for barang
+-- ----------------------------
+DROP TABLE IF EXISTS `barang`;
+CREATE TABLE `barang` (
   `kode_barang` varchar(20) NOT NULL,
   `nama_barang` varchar(200) NOT NULL,
   `harga` bigint(20) unsigned NOT NULL,
-  `jumlah_stok` bigint(20) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `jumlah_stok` bigint(20) NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unret4545` (`kode_barang`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `barang`
---
+-- ----------------------------
+-- Records of barang
+-- ----------------------------
+INSERT INTO `barang` VALUES ('br-01', 'perban', '45000', '4', '1');
+INSERT INTO `barang` VALUES ('br-10', 'Jendela', '4500000', '23', '2');
+INSERT INTO `barang` VALUES ('br-11', 'Kuda', '4500', '2', '3');
+INSERT INTO `barang` VALUES ('Item-0005', 'bilanganitu', '45000', '23', '5');
 
-INSERT INTO `barang` (`kode_barang`, `nama_barang`, `harga`, `jumlah_stok`) VALUES
-('br-01', 'perban', 45000, 4),
-('br-10', 'Jendela', 4500000, 23),
-('br-11', 'Kuda', 4500, 2),
-('ob-34', 'Kursi', 12345678, 4500020);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `detail_penjualan`
---
-
-CREATE TABLE IF NOT EXISTS `detail_penjualan` (
-  `kode_detail_penjualan` double NOT NULL,
-  `no_faktur` varchar(20) NOT NULL,
-  `kode_barang` varchar(20) NOT NULL,
+-- ----------------------------
+-- Table structure for detail_penjualan
+-- ----------------------------
+DROP TABLE IF EXISTS `detail_penjualan`;
+CREATE TABLE `detail_penjualan` (
+  `kode_detail_penjualan` double NOT NULL AUTO_INCREMENT,
+  `no_faktur` int(10) unsigned NOT NULL,
+  `id_barang` int(11) NOT NULL,
   `nama_barang` varchar(200) NOT NULL,
-  `jumlah` bigint(20) unsigned DEFAULT NULL,
+  `jumlah` bigint(20) DEFAULT NULL,
   `harga` bigint(20) unsigned DEFAULT NULL,
   `diskon` int(10) unsigned DEFAULT NULL,
-  `total` bigint(20) unsigned DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `detail_penjualan`
---
-
-INSERT INTO `detail_penjualan` (`kode_detail_penjualan`, `no_faktur`, `kode_barang`, `nama_barang`, `jumlah`, `harga`, `diskon`, `total`) VALUES
-(5, 'fk-2323', 'br-10', 'Jendela', 3400, 2300, 0, 7820000),
-(6, 'fk-2323', 'ob-34', 'Kursi', 56000, 4000, 50, 112000000);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `detail_purchase_order`
---
-
-CREATE TABLE IF NOT EXISTS `detail_purchase_order` (
-  `kode_detail_po` double unsigned NOT NULL,
-  `no_po` varchar(20) DEFAULT NULL,
-  `kode_barang` varchar(20) DEFAULT NULL,
-  `nama_barang` varchar(200) DEFAULT NULL,
-  `jumlah` bigint(20) unsigned DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `detail_purchase_order`
---
-
-INSERT INTO `detail_purchase_order` (`kode_detail_po`, `no_po`, `kode_barang`, `nama_barang`, `jumlah`) VALUES
-(2, 'PO-45', 'br-01', 'perban', 34),
-(9, 'po-9344', 'br-10', 'Jendela', 78000),
-(10, 'po-9344', 'br-01', 'perban', 89000),
-(11, 'po-008355', 'br-01', 'perban', 8906),
-(12, 'po-008355', 'br-10', 'Jendela', 4557);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `klaim_garansi`
---
-
-CREATE TABLE IF NOT EXISTS `klaim_garansi` (
-  `no_klaim` varchar(20) NOT NULL,
-  `tanggal` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `no_faktur` varchar(20) NOT NULL,
-  `kode_pelanggan` varchar(20) NOT NULL,
-  `kode_barang` varchar(20) NOT NULL,
-  `jumlah` int(10) unsigned NOT NULL
+  `total` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`kode_detail_penjualan`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
+-- ----------------------------
+-- Records of detail_penjualan
+-- ----------------------------
 
---
--- Table structure for table `pegawai`
---
+-- ----------------------------
+-- Table structure for detail_purchase_order
+-- ----------------------------
+DROP TABLE IF EXISTS `detail_purchase_order`;
+CREATE TABLE `detail_purchase_order` (
+  `kode_detail_po` double unsigned NOT NULL AUTO_INCREMENT,
+  `no_po` int(10) unsigned DEFAULT NULL,
+  `nama_barang` varchar(200) DEFAULT NULL,
+  `jumlah` bigint(20) DEFAULT NULL,
+  `id_barang` int(11) DEFAULT NULL,
+  PRIMARY KEY (`kode_detail_po`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `pegawai` (
+-- ----------------------------
+-- Records of detail_purchase_order
+-- ----------------------------
+INSERT INTO `detail_purchase_order` VALUES ('4', '2', 'bilanganitu', '67000', '5');
+
+-- ----------------------------
+-- Table structure for klaim_garansi
+-- ----------------------------
+DROP TABLE IF EXISTS `klaim_garansi`;
+CREATE TABLE `klaim_garansi` (
+  `no_klaim` varchar(20) NOT NULL,
+  `tanggal` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `no_faktur` int(10) unsigned NOT NULL,
+  `id_pelanggan` int(10) unsigned NOT NULL,
+  `id_barang` int(10) unsigned NOT NULL,
+  `jumlah` int(10) NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `undsf353` (`no_klaim`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of klaim_garansi
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for pegawai
+-- ----------------------------
+DROP TABLE IF EXISTS `pegawai`;
+CREATE TABLE `pegawai` (
   `id_pegawai` varchar(20) NOT NULL,
   `nama_pegawai` varchar(200) DEFAULT NULL,
   `alamat_pegawai` varchar(200) DEFAULT NULL,
   `telepon_pegawai` varchar(200) DEFAULT NULL,
   `email_pegawai` varchar(200) DEFAULT NULL,
-  `divisi` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `divisi` varchar(50) DEFAULT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unodft464te` (`id_pegawai`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `pegawai`
---
+-- ----------------------------
+-- Records of pegawai
+-- ----------------------------
+INSERT INTO `pegawai` VALUES ('ph-001', 'moji', 'alam dia', '089455', '', 'Akunting', '1');
+INSERT INTO `pegawai` VALUES ('ph-002', 'lomino', 'jl. molihon', '54644545', 'mildon@yo.net', 'Sekertaris', '2');
+INSERT INTO `pegawai` VALUES ('Emp-00031', 'mimDan1', 'alam raya1', '084545', 'mildn@yo.net', 'Udara', '3');
 
-INSERT INTO `pegawai` (`id_pegawai`, `nama_pegawai`, `alamat_pegawai`, `telepon_pegawai`, `email_pegawai`, `divisi`) VALUES
-('ph-001', 'moji', 'alam dia', '089455', '', 'Akunting'),
-('ph-002', 'lomino', 'jl. molihon', '54644545', 'mildon@yo.net', 'Sekertaris');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pelanggan`
---
-
-CREATE TABLE IF NOT EXISTS `pelanggan` (
+-- ----------------------------
+-- Table structure for pelanggan
+-- ----------------------------
+DROP TABLE IF EXISTS `pelanggan`;
+CREATE TABLE `pelanggan` (
   `kode_pelanggan` varchar(20) NOT NULL,
   `nama_pelanggan` varchar(200) DEFAULT NULL,
   `alamat_pelanggan` varchar(200) DEFAULT NULL,
   `telepon_pelanggan` varchar(200) DEFAULT NULL,
-  `email_pelanggan` varchar(250) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `email_pelanggan` varchar(250) DEFAULT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unhu7878u` (`kode_pelanggan`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `pelanggan`
---
+-- ----------------------------
+-- Records of pelanggan
+-- ----------------------------
+INSERT INTO `pelanggan` VALUES ('jj-00', 'milhom1', 'jl.milhom1', '65561', 'milhom1@yo.net', '1');
+INSERT INTO `pelanggan` VALUES ('jj-0089', 'milhomi4', 'jl. milhomi', '95656599', 'milhom9i@yo.net', '2');
+INSERT INTO `pelanggan` VALUES ('kl-93445', 'lnda', 'jl. milda', '084554', 'linda@yo.net', '3');
+INSERT INTO `pelanggan` VALUES ('ko-9455', 'milrom', 'alam rihum', '4545466', 'milrom@yo.net', '4');
+INSERT INTO `pelanggan` VALUES ('emp-4545', 'rindonim lio', 'jl. polinom', '435456', '', '5');
+INSERT INTO `pelanggan` VALUES ('Emp-0006', 'rinda lina', 'milha', '093434', 'mio@yo.net', '6');
 
-INSERT INTO `pelanggan` (`kode_pelanggan`, `nama_pelanggan`, `alamat_pelanggan`, `telepon_pelanggan`, `email_pelanggan`) VALUES
-('jj-00', 'milhom1', 'jl.milhom1', '65561', 'milhom1@yo.net'),
-('jj-0089', 'milhomi4', 'jl. milhomi', '95656599', 'milhom9i@yo.net'),
-('kl-93445', 'lnda', 'jl. milda', '084554', 'linda@yo.net'),
-('ko-9455', 'milrom', 'alam rihum', '4545466', 'milrom@yo.net'),
-('ty-45455', 'rindonim', 'jl. polinom', '435456', '');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `penjualan`
---
-
-CREATE TABLE IF NOT EXISTS `penjualan` (
+-- ----------------------------
+-- Table structure for penjualan
+-- ----------------------------
+DROP TABLE IF EXISTS `penjualan`;
+CREATE TABLE `penjualan` (
   `no_faktur` varchar(20) NOT NULL,
   `tanggal` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `kode_pelanggan` varchar(20) NOT NULL,
-  `id_pegawai` varchar(20) NOT NULL
+  `id_pelanggan` int(10) unsigned NOT NULL,
+  `id_pegawai` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `undfghrty565` (`no_faktur`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `penjualan`
---
+-- ----------------------------
+-- Records of penjualan
+-- ----------------------------
 
-INSERT INTO `penjualan` (`no_faktur`, `tanggal`, `kode_pelanggan`, `id_pegawai`) VALUES
-('fk-2323', '2015-03-26 17:00:00', 'ko-9455', 'ph-001');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `purchase_order`
---
-
-CREATE TABLE IF NOT EXISTS `purchase_order` (
+-- ----------------------------
+-- Table structure for purchase_order
+-- ----------------------------
+DROP TABLE IF EXISTS `purchase_order`;
+CREATE TABLE `purchase_order` (
   `no_po` varchar(20) NOT NULL,
   `tanggal` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `kode_supplier` varchar(20) NOT NULL,
-  `id_pegawai` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_supplier` int(10) unsigned DEFAULT NULL,
+  `id_pegawai` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `untryt56` (`no_po`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `purchase_order`
---
+-- ----------------------------
+-- Records of purchase_order
+-- ----------------------------
+INSERT INTO `purchase_order` VALUES ('PO-0001', '2015-03-18 00:00:00', '2', '1', '2');
 
-INSERT INTO `purchase_order` (`no_po`, `tanggal`, `kode_supplier`, `id_pegawai`) VALUES
-('po-008355', '2015-03-10 17:00:00', 'sp-001', 'ph-002'),
-('PO-45', '2015-03-17 17:00:00', 'sp-0012', 'ph-001'),
-('po-9344', '2015-03-11 17:00:00', 'sp-0012', 'ph-002');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `retur_pembelian`
---
-
-CREATE TABLE IF NOT EXISTS `retur_pembelian` (
+-- ----------------------------
+-- Table structure for retur_pembelian
+-- ----------------------------
+DROP TABLE IF EXISTS `retur_pembelian`;
+CREATE TABLE `retur_pembelian` (
   `no_retur_pembelian` varchar(20) NOT NULL,
   `tanggal` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `no_po` varchar(20) NOT NULL,
-  `id_pegawai` varchar(20) NOT NULL,
-  `kode_supplier` varchar(20) NOT NULL,
-  `kode_barang` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `id_po` int(10) unsigned NOT NULL,
+  `id_pegawai` int(10) unsigned NOT NULL,
+  `id_supplier` int(10) unsigned NOT NULL,
+  `id_barang` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `undfkgm46` (`no_retur_pembelian`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `retur_pembelian`
---
+-- ----------------------------
+-- Records of retur_pembelian
+-- ----------------------------
+INSERT INTO `retur_pembelian` VALUES ('RPO-0001', '2015-03-10 00:00:00', '2', '1', '3', '3', '1');
 
-INSERT INTO `retur_pembelian` (`no_retur_pembelian`, `tanggal`, `no_po`, `id_pegawai`, `kode_supplier`, `kode_barang`) VALUES
-('ro-234', '2015-03-19 17:00:00', 'po-9344', 'ph-002', 'sp-001', 'br-10'),
-('ro-344', '2015-03-18 17:00:00', 'po-008355', 'ph-002', 'sp-0012', 'br-10');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `retur_penjualan`
---
-
-CREATE TABLE IF NOT EXISTS `retur_penjualan` (
+-- ----------------------------
+-- Table structure for retur_penjualan
+-- ----------------------------
+DROP TABLE IF EXISTS `retur_penjualan`;
+CREATE TABLE `retur_penjualan` (
   `no_returpenjualan` varchar(20) NOT NULL,
   `tanggal` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `no_faktur` varchar(20) NOT NULL,
-  `id_pegawai` varchar(20) NOT NULL,
-  `kode_pelanggan` varchar(20) NOT NULL,
-  `kode_barang` varchar(20) NOT NULL,
+  `no_faktur` int(10) unsigned NOT NULL,
+  `id_pegawai` int(10) unsigned NOT NULL,
+  `id_pelanggan` int(10) unsigned NOT NULL,
+  `id_barang` int(10) unsigned NOT NULL,
   `nama_barang` varchar(200) NOT NULL,
-  `jumlah` int(11) unsigned NOT NULL
+  `jumlah` int(11) NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `undfg4354` (`no_returpenjualan`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
+-- ----------------------------
+-- Records of retur_penjualan
+-- ----------------------------
 
---
--- Table structure for table `supplier`
---
-
-CREATE TABLE IF NOT EXISTS `supplier` (
+-- ----------------------------
+-- Table structure for supplier
+-- ----------------------------
+DROP TABLE IF EXISTS `supplier`;
+CREATE TABLE `supplier` (
   `kode_supplier` varchar(20) NOT NULL,
   `nama_supplier` varchar(200) DEFAULT NULL,
   `alamat_supplier` varchar(200) DEFAULT NULL,
   `telepon_supplier` varchar(200) DEFAULT NULL,
-  `email_supplier` varchar(250) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `email_supplier` varchar(250) DEFAULT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniy89889` (`kode_supplier`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `supplier`
---
-
-INSERT INTO `supplier` (`kode_supplier`, `nama_supplier`, `alamat_supplier`, `telepon_supplier`, `email_supplier`) VALUES
-('sp-001', 'riahna', 'jl. molida', '45645', 'riahna@yo.net'),
-('sp-0012', 'lomino23', 'jl.polnom3', '435453', '');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `barang`
---
-ALTER TABLE `barang`
-  ADD PRIMARY KEY (`kode_barang`);
-
---
--- Indexes for table `detail_penjualan`
---
-ALTER TABLE `detail_penjualan`
-  ADD PRIMARY KEY (`kode_detail_penjualan`);
-
---
--- Indexes for table `detail_purchase_order`
---
-ALTER TABLE `detail_purchase_order`
-  ADD PRIMARY KEY (`kode_detail_po`);
-
---
--- Indexes for table `klaim_garansi`
---
-ALTER TABLE `klaim_garansi`
-  ADD PRIMARY KEY (`no_klaim`);
-
---
--- Indexes for table `pegawai`
---
-ALTER TABLE `pegawai`
-  ADD PRIMARY KEY (`id_pegawai`);
-
---
--- Indexes for table `pelanggan`
---
-ALTER TABLE `pelanggan`
-  ADD PRIMARY KEY (`kode_pelanggan`);
-
---
--- Indexes for table `penjualan`
---
-ALTER TABLE `penjualan`
-  ADD PRIMARY KEY (`no_faktur`);
-
---
--- Indexes for table `purchase_order`
---
-ALTER TABLE `purchase_order`
-  ADD PRIMARY KEY (`no_po`);
-
---
--- Indexes for table `retur_pembelian`
---
-ALTER TABLE `retur_pembelian`
-  ADD PRIMARY KEY (`no_retur_pembelian`);
-
---
--- Indexes for table `retur_penjualan`
---
-ALTER TABLE `retur_penjualan`
-  ADD PRIMARY KEY (`no_returpenjualan`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `detail_penjualan`
---
-ALTER TABLE `detail_penjualan`
-  MODIFY `kode_detail_penjualan` double NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT for table `detail_purchase_order`
---
-ALTER TABLE `detail_purchase_order`
-  MODIFY `kode_detail_po` double unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- ----------------------------
+-- Records of supplier
+-- ----------------------------
+INSERT INTO `supplier` VALUES ('sp-001', 'riahna', 'jl. molida', '45645', 'riahna@yo.net', '1');
+INSERT INTO `supplier` VALUES ('Sup-00031', 'linda1', 'jilan', '34545', 'mioti@yo.net', '3');
