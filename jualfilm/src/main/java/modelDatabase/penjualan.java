@@ -29,7 +29,7 @@ public class penjualan {
     private Timestamp tanggal;
     
     @OneToOne
-    @JoinColumn(name="kode_pelanggan")
+    @JoinColumn(name="id_pelanggan")
     private pelanggan kode_pelanggan;
         
     @OneToOne

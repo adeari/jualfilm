@@ -38,12 +38,12 @@ public class klaim_garansi implements Serializable {
     private penjualan no_faktur;
         
     @OneToOne
-    @JoinColumn(name="kode_pelanggan")
+    @JoinColumn(name="id_pelanggan")
     private pelanggan kode_pelanggan;
     
     
     @OneToOne
-    @JoinColumn(name="kode_barang")
+    @JoinColumn(name="id_barang")
     private barang kode_barang;
         
     @Column(name = "jumlah")

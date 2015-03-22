@@ -11,6 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+
+import java.io.Serializable;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
 /**
  *
  * @author ade
@@ -19,6 +23,10 @@ import javax.persistence.OneToOne;
 @Table(name = "retur_penjualan")
 public class retur_penjualan {
     @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id", unique = true, nullable = false, length = 20)
+    private Integer id;
+    
     @Column(name = "no_returpenjualan", unique = true, nullable = false, length = 20)
     private String no_returpenjualan;
     
@@ -34,12 +42,12 @@ public class retur_penjualan {
     private pegawai id_pegawai;
     
     @OneToOne
-    @JoinColumn(name="kode_pelanggan")
+    @JoinColumn(name="id_pelanggan")
     private pelanggan kode_pelanggan;
     
     
     @OneToOne
-    @JoinColumn(name="kode_barang")
+    @JoinColumn(name="id_barang")
     private barang kode_barang;
     
     @Column(name = "nama_barang")
