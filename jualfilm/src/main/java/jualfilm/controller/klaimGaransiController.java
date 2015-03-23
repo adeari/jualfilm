@@ -12,8 +12,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import modelDatabase.hibernateUtil;
+
 import javax.servlet.http.HttpServletRequest;
+
 import modelDatabase.barang;
 import modelDatabase.klaim_garansi;
 import modelDatabase.pegawai;
@@ -28,16 +31,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import org.json.JSONObject;
 /**
  *
@@ -93,7 +93,25 @@ public class klaimGaransiController {
     
     @RequestMapping(value="klaimgaransi/add", method = RequestMethod.GET)
     public String dataAdd(ModelMap model) {  
-        model.addAttribute("headerapps", "Klaim Gransi Baru");        
+        model.addAttribute("headerapps", "Klaim Gransi Baru");
+        
+        Map mapDAta = new HashMap();
+        Session session = hibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(klaim_garansi.class).setProjection(Projections.property("id"));
+        criteria.addOrder(Order.desc("id"));
+        criteria.setMaxResults(1);
+        String kodedata = "GAR-0001";
+        if (criteria.uniqueResult() != null ) {
+            kodedata = String.valueOf(Integer.valueOf(criteria.uniqueResult().toString())+1);
+            while (kodedata.length() < 4) {
+                kodedata = "0"+kodedata;
+            }
+            kodedata = "GAR-"+kodedata;
+        }
+        mapDAta.put("no_klaim", kodedata);
+        model.addAttribute("dataEdit", mapDAta);
+        session.close();
+        
         return "klaimGaransiAdd";
     }
     
@@ -137,12 +155,34 @@ public class klaimGaransiController {
         }
         
         Session session = hibernateUtil.getSessionFactory().openSession();
+        
+        pelanggan pelangganIn = new pelanggan();
+        Criteria criteria = session.createCriteria(pelanggan.class);
+        criteria.add(Restrictions.eq("kode_pelanggan", pelanggan));
+        if ( criteria .uniqueResult() != null) {
+        	pelangganIn = (pelanggan) criteria .uniqueResult();
+        }
+        
+        barang barangIn = new barang();
+        criteria = session.createCriteria(barang.class);
+        criteria.add(Restrictions.eq("kode_barang", kode_barang));
+        if ( criteria .uniqueResult() != null) {
+            barangIn = (barang) criteria .uniqueResult();
+        }
+        
+        penjualan penjualanIn = new penjualan();
+        criteria = session.createCriteria(penjualan.class);
+        criteria.add(Restrictions.eq("no_faktur", no_faktur));
+        if ( criteria .uniqueResult() != null) {
+        	penjualanIn = (penjualan) criteria .uniqueResult();
+        }
+        
         Transaction trx = session.beginTransaction();
         
         klaim_garansi kga = new klaim_garansi();
-        kga.setKode_barang(new barang(kode_barang));
-        kga.setKode_pelanggan(new pelanggan(pelanggan));
-        kga.setNo_faktur(new penjualan(no_faktur));
+        kga.setKode_barang(barangIn);
+        kga.setKode_pelanggan(pelangganIn);
+        kga.setNo_faktur(penjualanIn);
         kga.setNo_klaim(no_klaim);
         try {
             kga.setJumlah(Long.valueOf(jumlah));
@@ -277,9 +317,30 @@ public class klaimGaransiController {
             Transaction trx = session.beginTransaction();
             klaim_garansi kga = (klaim_garansi) criteria.uniqueResult();
             
-            kga.setKode_barang(new barang(kode_barang));
-            kga.setKode_pelanggan(new pelanggan(pelanggan));
-            kga.setNo_faktur(new penjualan(no_faktur));
+            pelanggan pelangganIn = new pelanggan();
+            criteria = session.createCriteria(pelanggan.class);
+            criteria.add(Restrictions.eq("kode_pelanggan", pelanggan));
+            if ( criteria .uniqueResult() != null) {
+            	pelangganIn = (pelanggan) criteria .uniqueResult();
+            }
+            
+            barang barangIn = new barang();
+            criteria = session.createCriteria(barang.class);
+            criteria.add(Restrictions.eq("kode_barang", kode_barang));
+            if ( criteria .uniqueResult() != null) {
+                barangIn = (barang) criteria .uniqueResult();
+            }
+            
+            penjualan penjualanIn = new penjualan();
+            criteria = session.createCriteria(penjualan.class);
+            criteria.add(Restrictions.eq("no_faktur", no_faktur));
+            if ( criteria .uniqueResult() != null) {
+            	penjualanIn = (penjualan) criteria .uniqueResult();
+            }
+            
+            kga.setKode_barang(barangIn);
+            kga.setKode_pelanggan(pelangganIn);
+            kga.setNo_faktur(penjualanIn);
             try {
                 kga.setJumlah(Long.valueOf(jumlah));
             } catch (Exception ex) {

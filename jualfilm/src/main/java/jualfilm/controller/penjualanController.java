@@ -15,8 +15,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import modelDatabase.hibernateUtil;
+
 import javax.servlet.http.HttpServletRequest;
+
 import modelDatabase.barang;
 import modelDatabase.detail_penjualan;
 import modelDatabase.detail_purchase_order;
@@ -30,16 +33,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import org.json.JSONObject;
 /**
  *
@@ -105,7 +105,25 @@ public class penjualanController {
     
     @RequestMapping(value="penjualan/add", method = RequestMethod.GET)
     public String dataAdd(ModelMap model) {  
-        model.addAttribute("headerapps", " Penjualan Baru");        
+        model.addAttribute("headerapps", " Penjualan Baru");
+        
+        Map mapDAta = new HashMap();
+        Session session = hibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(penjualan.class).setProjection(Projections.property("id"));
+        criteria.addOrder(Order.desc("id"));
+        criteria.setMaxResults(1);
+        String kodedata = "JAL-0001";
+        if (criteria.uniqueResult() != null ) {
+            kodedata = String.valueOf(Integer.valueOf(criteria.uniqueResult().toString())+1);
+            while (kodedata.length() < 4) {
+                kodedata = "0"+kodedata;
+            }
+            kodedata = "JAL-"+kodedata;
+        }
+        mapDAta.put("no_faktur", kodedata);
+        model.addAttribute("dataEdit", mapDAta);
+        session.close();
+        
         return "penjualanAdd";
     }
     
@@ -127,6 +145,21 @@ public class penjualanController {
         int lengthDAta = kodeparameter.length;
         
         Session session = hibernateUtil.getSessionFactory().openSession();
+        
+        pegawai pegawaiIn = new pegawai();
+        Criteria criteria = session.createCriteria(pegawai.class);
+        criteria.add(Restrictions.eq("id_pegawai", pegawai));
+        if ( criteria .uniqueResult() != null) {
+            pegawaiIn = (pegawai) criteria .uniqueResult();
+        }
+        
+        pelanggan pelangganIn = new pelanggan();
+        criteria = session.createCriteria(pelanggan.class);
+        criteria.add(Restrictions.eq("kode_pelanggan", pelanggan));
+        if ( criteria .uniqueResult() != null) {
+        	pelangganIn = (pelanggan) criteria .uniqueResult();
+        }
+        
         Transaction trx = session.beginTransaction();
         
        penjualan pj = new penjualan();
@@ -137,8 +170,9 @@ public class penjualanController {
         } catch (ParseException ex) {
             Logger.getLogger(purchaseOrderController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        pj.setKode_pelanggan(new pelanggan(pelanggan));
-        pj.setId_pegawai(new pegawai(pegawai));
+        
+        pj.setKode_pelanggan(pelangganIn);
+        pj.setId_pegawai(pegawaiIn);
         session.save(pj);
                 
         int i = 0;
@@ -158,7 +192,16 @@ public class penjualanController {
                     if (jmlBarangl>0) {
                         detail_penjualan dpe = new detail_penjualan();
                         dpe.setNo_faktur(pj);
-                        dpe.setKode_barang(new barang(kodeparameter[i]));
+                        
+                        barang barangIn = new barang();
+                        criteria = session.createCriteria(barang.class);
+                        criteria.add(Restrictions.eq("kode_barang", kodeparameter[i]));
+                        if ( criteria .uniqueResult() != null) {
+                            barangIn = (barang) criteria .uniqueResult();
+                        }
+                        
+                        
+                        dpe.setKode_barang(barangIn);
                         dpe.setNama_barang(namabarang[i]);
                         dpe.setJumlah(jmlBarangl);
                         try {
@@ -301,8 +344,23 @@ public class penjualanController {
                 } catch (ParseException ex) {
                     Logger.getLogger(purchaseOrderController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                pj.setKode_pelanggan(new pelanggan(pelanggan));
-                pj.setId_pegawai(new pegawai(pegawai));
+                
+                pegawai pegawaiIn = new pegawai();
+                criteria = session.createCriteria(pegawai.class);
+                criteria.add(Restrictions.eq("id_pegawai", pegawai));
+                if ( criteria .uniqueResult() != null) {
+                    pegawaiIn = (pegawai) criteria .uniqueResult();
+                }
+                
+                pelanggan pelangganIn = new pelanggan();
+                criteria = session.createCriteria(pelanggan.class);
+                criteria.add(Restrictions.eq("kode_pelanggan", pelanggan));
+                if ( criteria .uniqueResult() != null) {
+                	pelangganIn = (pelanggan) criteria .uniqueResult();
+                }
+                
+                pj.setKode_pelanggan(pelangganIn);
+                pj.setId_pegawai(pegawaiIn);
                 session.save(pj);
                 
                 if (!no_faktur.equalsIgnoreCase(no_faktur1)) {
@@ -333,7 +391,16 @@ public class penjualanController {
                             if (jmlBarangl>0) {
                                 detail_penjualan dpe = new detail_penjualan();
                                 dpe.setNo_faktur(pj);
-                                dpe.setKode_barang(new barang(kodeparameter[i]));
+                                
+                                barang barangIn = new barang();
+                                criteria = session.createCriteria(barang.class);
+                                criteria.add(Restrictions.eq("kode_barang", kodeparameter[i]));
+                                if ( criteria .uniqueResult() != null) {
+                                    barangIn = (barang) criteria .uniqueResult();
+                                }
+                                
+                                
+                                dpe.setKode_barang(barangIn);
                                 dpe.setNama_barang(namabarang[i]);
                                 dpe.setJumlah(jmlBarangl);
                                 try {

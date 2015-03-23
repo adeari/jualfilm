@@ -12,8 +12,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import modelDatabase.hibernateUtil;
+
 import javax.servlet.http.HttpServletRequest;
+
 import modelDatabase.barang;
 import modelDatabase.pegawai;
 import modelDatabase.pelanggan;
@@ -27,16 +30,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import org.json.JSONObject;
 /**
  *
@@ -96,7 +96,25 @@ public class returPenjualanController {
     
     @RequestMapping(value="retur-penjualan/add", method = RequestMethod.GET)
     public String dataAdd(ModelMap model) {  
-        model.addAttribute("headerapps", "Retur Penjualan Baru");        
+        model.addAttribute("headerapps", "Retur Penjualan Baru");
+        
+        Map mapDAta = new HashMap();
+        Session session = hibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(retur_penjualan.class).setProjection(Projections.property("id"));
+        criteria.addOrder(Order.desc("id"));
+        criteria.setMaxResults(1);
+        String kodedata = "RJAL-0001";
+        if (criteria.uniqueResult() != null ) {
+            kodedata = String.valueOf(Integer.valueOf(criteria.uniqueResult().toString())+1);
+            while (kodedata.length() < 4) {
+                kodedata = "0"+kodedata;
+            }
+            kodedata = "RJAL-"+kodedata;
+        }
+        mapDAta.put("no_returpenjualan", kodedata);
+        model.addAttribute("dataEdit", mapDAta);
+        session.close();
+        
         return "returPenjualanAdd";
     }
     
@@ -105,7 +123,6 @@ public class returPenjualanController {
         String no_returpenjualan = request.getParameter("no_returpenjualan");
         String tanggal = request.getParameter("tanggal");
         String no_faktur = request.getParameter("no_faktur");
-        System.out.println(" no_faktur = "+no_faktur);
         String jumlah = request.getParameter("jumlah");
         if (jumlah.length()>0) {
             jumlah = jumlah.replace(".", "");
@@ -152,11 +169,39 @@ public class returPenjualanController {
         Transaction trx = session.beginTransaction();
         
         retur_penjualan rpp = new retur_penjualan();
-        rpp.setId_pegawai(new pegawai(pegawai));
-        rpp.setKode_barang(new barang(kode_barang));
-        rpp.setKode_pelanggan(new pelanggan(pelanggan));
-        System.out.println(" no faktur "+no_faktur);
-        rpp.setNo_faktur(new penjualan(no_faktur));
+        
+        pegawai pegawaiIn = new pegawai();
+        Criteria criteria = session.createCriteria(pegawai.class);
+        criteria.add(Restrictions.eq("id_pegawai", pegawai));
+        if ( criteria .uniqueResult() != null) {
+            pegawaiIn = (pegawai) criteria .uniqueResult();
+        }
+        
+        pelanggan pelangganIn = new pelanggan();
+        criteria = session.createCriteria(pelanggan.class);
+        criteria.add(Restrictions.eq("kode_pelanggan", pelanggan));
+        if ( criteria .uniqueResult() != null) {
+        	pelangganIn = (pelanggan) criteria .uniqueResult();
+        }
+        
+        barang barangIn = new barang();
+        criteria = session.createCriteria(barang.class);
+        criteria.add(Restrictions.eq("kode_barang", kode_barang));
+        if ( criteria .uniqueResult() != null) {
+            barangIn = (barang) criteria .uniqueResult();
+        }
+        
+        penjualan penjualanIn = new penjualan();
+        criteria = session.createCriteria(penjualan.class);
+        criteria.add(Restrictions.eq("no_faktur", no_faktur));
+        if ( criteria .uniqueResult() != null) {
+        	penjualanIn = (penjualan) criteria .uniqueResult();
+        }
+        
+        rpp.setId_pegawai(pegawaiIn);
+        rpp.setKode_barang(barangIn);
+        rpp.setKode_pelanggan(pelangganIn);
+        rpp.setNo_faktur(penjualanIn);
         rpp.setNo_returpenjualan(no_returpenjualan);
         rpp.setNama_barang(nama_barang);
         try {
@@ -307,10 +352,39 @@ public class returPenjualanController {
             Transaction trx = session.beginTransaction();
             retur_penjualan rpp = (retur_penjualan) criteria.uniqueResult();
             
-            rpp.setId_pegawai(new pegawai(pegawai));
-            rpp.setKode_barang(new barang(kode_barang));
-            rpp.setKode_pelanggan(new pelanggan(pelanggan));
-            rpp.setNo_faktur(new penjualan(no_faktur));
+            pegawai pegawaiIn = new pegawai();
+            criteria = session.createCriteria(pegawai.class);
+            criteria.add(Restrictions.eq("id_pegawai", pegawai));
+            if ( criteria .uniqueResult() != null) {
+                pegawaiIn = (pegawai) criteria .uniqueResult();
+            }
+            
+            pelanggan pelangganIn = new pelanggan();
+            criteria = session.createCriteria(pelanggan.class);
+            criteria.add(Restrictions.eq("kode_pelanggan", pelanggan));
+            if ( criteria .uniqueResult() != null) {
+            	pelangganIn = (pelanggan) criteria .uniqueResult();
+            }
+            
+            barang barangIn = new barang();
+            criteria = session.createCriteria(barang.class);
+            criteria.add(Restrictions.eq("kode_barang", kode_barang));
+            if ( criteria .uniqueResult() != null) {
+                barangIn = (barang) criteria .uniqueResult();
+            }
+            
+            penjualan penjualanIn = new penjualan();
+            criteria = session.createCriteria(penjualan.class);
+            criteria.add(Restrictions.eq("no_faktur", no_faktur));
+            if ( criteria .uniqueResult() != null) {
+            	penjualanIn = (penjualan) criteria .uniqueResult();
+            }
+            
+            rpp.setId_pegawai(pegawaiIn);
+            rpp.setKode_barang(barangIn);
+            rpp.setKode_pelanggan(pelangganIn);
+            rpp.setNo_faktur(penjualanIn);
+            rpp.setNo_returpenjualan(no_returpenjualan);
             rpp.setNama_barang(nama_barang);
             try {
                 rpp.setJumlah(Long.valueOf(jumlah));

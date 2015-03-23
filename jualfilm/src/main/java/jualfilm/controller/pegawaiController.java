@@ -75,8 +75,8 @@ public class pegawaiController {
                 kodedata = "0"+kodedata;
             }
             kodedata = "Emp-"+kodedata;
-            mapDAta.put("id_pegawai", kodedata);
         }
+        mapDAta.put("id_pegawai", kodedata);
         model.addAttribute("dataEdit", mapDAta);
         session.close();
         

@@ -4,10 +4,15 @@
  */
 package modelDatabase;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.Column;
@@ -20,8 +25,12 @@ import javax.persistence.OneToOne;
  */
 @Entity
 @Table(name = "penjualan")
-public class penjualan {
+public class penjualan implements Serializable  {
     @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id", unique = true, nullable = false, length = 20)
+    private Integer id;
+    
     @Column(name = "no_faktur", unique = true, nullable = false, length = 20)
     private String no_faktur;
     
@@ -85,5 +94,14 @@ public class penjualan {
 
     public void setTanggal(Timestamp tanggal) {
         this.tanggal = tanggal;
+    }
+    
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

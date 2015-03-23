@@ -199,4 +199,13 @@ public class barangController {
         session.close();
         return returndata;
     }
+    
+    @RequestMapping(value="barang/laporan", method = RequestMethod.GET)
+    public String laporanList(ModelMap model) {
+        Session session = hibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(barang.class);
+        model.addAttribute("dataList", criteria.list());
+        session.close();
+        return "barangLaporan";
+    }
 }
