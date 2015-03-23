@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-03-23 05:26:47
+Date: 2015-03-24 06:19:13
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -51,11 +51,13 @@ CREATE TABLE `detail_penjualan` (
   `diskon` int(10) unsigned DEFAULT NULL,
   `total` bigint(20) unsigned DEFAULT NULL,
   PRIMARY KEY (`kode_detail_penjualan`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of detail_penjualan
 -- ----------------------------
+INSERT INTO `detail_penjualan` VALUES ('3', '1', '3', 'Kuda', '4', '3400', '20', '10880');
+INSERT INTO `detail_penjualan` VALUES ('4', '1', '2', 'Jendela', '3', '4500', '5', '12825');
 
 -- ----------------------------
 -- Table structure for detail_purchase_order
@@ -68,12 +70,14 @@ CREATE TABLE `detail_purchase_order` (
   `jumlah` bigint(20) DEFAULT NULL,
   `id_barang` int(11) DEFAULT NULL,
   PRIMARY KEY (`kode_detail_po`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of detail_purchase_order
 -- ----------------------------
 INSERT INTO `detail_purchase_order` VALUES ('4', '2', 'bilanganitu', '67000', '5');
+INSERT INTO `detail_purchase_order` VALUES ('5', '3', 'bilanganitu', '4555', '5');
+INSERT INTO `detail_purchase_order` VALUES ('6', '3', 'Kuda', '6767', '3');
 
 -- ----------------------------
 -- Table structure for klaim_garansi
@@ -89,11 +93,12 @@ CREATE TABLE `klaim_garansi` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   UNIQUE KEY `undsf353` (`no_klaim`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of klaim_garansi
 -- ----------------------------
+INSERT INTO `klaim_garansi` VALUES ('GAR-0001', '2015-03-26 00:00:00', '1', '7', '5', '343500', '1');
 
 -- ----------------------------
 -- Table structure for pegawai
@@ -131,7 +136,7 @@ CREATE TABLE `pelanggan` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unhu7878u` (`kode_pelanggan`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of pelanggan
@@ -142,6 +147,7 @@ INSERT INTO `pelanggan` VALUES ('kl-93445', 'lnda', 'jl. milda', '084554', 'lind
 INSERT INTO `pelanggan` VALUES ('ko-9455', 'milrom', 'alam rihum', '4545466', 'milrom@yo.net', '4');
 INSERT INTO `pelanggan` VALUES ('emp-4545', 'rindonim lio', 'jl. polinom', '435456', '', '5');
 INSERT INTO `pelanggan` VALUES ('Emp-0006', 'rinda lina', 'milha', '093434', 'mio@yo.net', '6');
+INSERT INTO `pelanggan` VALUES ('Cust-0007', 'Lihanim', 'jiko jalan', '084545', 'moow@go.com', '7');
 
 -- ----------------------------
 -- Table structure for penjualan
@@ -155,11 +161,12 @@ CREATE TABLE `penjualan` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   UNIQUE KEY `undfghrty565` (`no_faktur`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of penjualan
 -- ----------------------------
+INSERT INTO `penjualan` VALUES ('JAL-0001', '2015-03-10 00:00:00', '7', '3', '1');
 
 -- ----------------------------
 -- Table structure for purchase_order
@@ -173,12 +180,13 @@ CREATE TABLE `purchase_order` (
   `id_pegawai` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `untryt56` (`no_po`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of purchase_order
 -- ----------------------------
 INSERT INTO `purchase_order` VALUES ('PO-0001', '2015-03-18 00:00:00', '2', '1', '2');
+INSERT INTO `purchase_order` VALUES ('PO-0003', '2015-03-18 00:00:00', '3', '3', '3');
 
 -- ----------------------------
 -- Table structure for retur_pembelian
@@ -194,12 +202,13 @@ CREATE TABLE `retur_pembelian` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   UNIQUE KEY `undfkgm46` (`no_retur_pembelian`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of retur_pembelian
 -- ----------------------------
 INSERT INTO `retur_pembelian` VALUES ('RPO-0001', '2015-03-10 00:00:00', '2', '1', '3', '3', '1');
+INSERT INTO `retur_pembelian` VALUES ('RPO-0002', '2015-03-12 00:00:00', '3', '2', '1', '5', '2');
 
 -- ----------------------------
 -- Table structure for retur_penjualan
@@ -217,11 +226,12 @@ CREATE TABLE `retur_penjualan` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   UNIQUE KEY `undfg4354` (`no_returpenjualan`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of retur_penjualan
 -- ----------------------------
+INSERT INTO `retur_penjualan` VALUES ('RJAL-0001', '2015-03-18 00:00:00', '1', '3', '7', '5', 'bilanganitu', '5600', '1');
 
 -- ----------------------------
 -- Table structure for supplier
