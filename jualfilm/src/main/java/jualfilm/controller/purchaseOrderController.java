@@ -5,19 +5,24 @@
 package jualfilm.controller;
 
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import modelDatabase.hibernateUtil;
+
 import javax.servlet.http.HttpServletRequest;
+
 import modelDatabase.barang;
 import modelDatabase.detail_purchase_order;
 import modelDatabase.pegawai;
@@ -28,21 +33,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import org.json.JSONObject;
-
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.hibernate.criterion.Order;
 /**
  *
@@ -389,4 +390,53 @@ public class purchaseOrderController {
         session.close();
         return returndata;
     }
+    
+    
+    @RequestMapping(value="purchase-order/laporan", method = RequestMethod.GET)
+    public String dataLaporanList(ModelMap model, HttpServletRequest req) {      
+        Session session = hibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(detail_purchase_order.class);
+        
+        
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        try {
+        	
+        	if (req.getParameter("from") != null && req.getParameter("to") != null) {
+        		Timestamp starDate = new Timestamp( df.parse(req.getParameter("from")+" 00:00:00").getTime() );
+        		Timestamp toDate = new Timestamp(df.parse(req.getParameter("to")+" 59:59:59").getTime());
+        		criteria.createAlias("no_po", "po");
+        		criteria.add(Restrictions.between("po.tanggal", starDate, toDate));
+        		model.addAttribute("startDate", req.getParameter("from"));
+        		model.addAttribute("endDate", req.getParameter("to"));
+        	}
+        	
+        } catch (Exception ex) {
+        	System.out.println(" err dataLaporanList "+ex.getMessage());
+        }
+        
+        List<detail_purchase_order> lData = criteria.list();
+        List dataShow = new ArrayList();
+        
+        Long totaldata = (long) 0;
+        df = new SimpleDateFormat("dd/MM/yyyy");
+        for (detail_purchase_order dpo : lData) {
+           Map<String, String> modelHere = new HashMap<String, String>();
+           try {
+           modelHere.put("no_po", dpo.getNo_po().getNo_po());
+           modelHere.put("tanggal", df.format(dpo.getNo_po().getTanggal()));
+           modelHere.put("kodeBarang", dpo.getKode_barang().getKode_barang());
+           modelHere.put("namaBarang", dpo.getKode_barang().getNama_barang());
+           modelHere.put("jumlah", dpo.getJumlah().toString());
+           totaldata += dpo.getJumlah();
+           } catch (Exception ex) {
+        	   
+           }
+           dataShow.add(modelHere);
+        }
+        model.addAttribute("dataList", dataShow);
+        model.addAttribute("total", totaldata);
+        session.close();
+        return "purchaseLaporan";
+    }
+    
 }

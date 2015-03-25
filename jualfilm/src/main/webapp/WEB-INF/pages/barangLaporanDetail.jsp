@@ -7,40 +7,59 @@
 --%>
 <%@include file="/WEB-INF/layout/header.jsp" %>
 <!DOCTYPE html>
+
 <div class="row">
-	<div class="col-xs-8">
-		<h1>Stok</h1>
+	<div class="col-xs-12">
+		<h1>Stok Detail</h1>
 	</div>
 </div>
 
 <div class="row">
+	<div class="col-xs-12 text-right">
+		<table class="table1">
+			<tr>
+				<td>Kode Barang</td>
+				<td>:</td>
+				<td>${barang.kode_barang}</td>
+			</tr>
+			<tr>
+				<td>Nama Barang</td>
+				<td>:</td>
+				<td>${barang.nama_barang}</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<div class="row">
+<br/><br/><br/>
 	<div class="col-xs-12">
 		<table class="table">
 			<colgroup>
-				<col width="100" />
 				<col width="200" />
+				<col />
 				<col width="100" />
 			</colgroup>
 			<thead>
 				<tr>
-					<th>Kode Barang</th>
-					<th>Nama Barang</th>
-					<th style="text-align: right">Jumlah Barang</th>
+					<th>Kode Transaksi</th>
+					<th>Tanggal</th>
+					<th class="text-right">Jumlah</th>
 				</tr>
 			</thead>
 			<tbody>
-                            
-                        <c:forEach items="${dataList}" var="data1">
-                            <tr>
-                                <td><a href="${baseURL}barang/detail/<c:out value="${data1.kode_barang}"/>"><c:out value="${data1.kode_barang}"/></a></td>
-                                <td><c:out value="${data1.nama_barang}"/></td>
-                                <td align="right" class="numberfilter"><c:out value="${data1.jumlah_stok}"/></td>
-                            </tr>                    
-                        </c:forEach>
+			<c:forEach items="${trxList}" var="data1">
+				<tr>
+					<td><c:out value="${data1.kode_transaksi}"/></td>
+					<td><c:out value="${data1.tanggal}"/></td>
+					<td class="text-right numberfilter"><c:out value="${data1.jumlah}"/></td>
+				</tr>
+			</c:forEach>
 			</tbody>
 		</table>
 	</div>
 </div>
+
 <%@include file="/WEB-INF/layout/footer.jsp" %>
 <script>
 function addCommas( sValue ) 

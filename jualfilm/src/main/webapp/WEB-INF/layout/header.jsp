@@ -105,10 +105,8 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Laporan <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="#">Laporan Penjualan</a></li>
-								<li><a href="#">Laporan Pembelian</a></li>
-								<li><a href="#">Laporan Persediaan Barang</a></li>
-								<li><a href="#">Laporan Retur</a></li>
+								<li><a href="${baseURL}penjualan/laporan">Laporan Penjualan</a></li>
+								<li><a href="${baseURL}purchase-order/laporan">Laporan Pembelian</a></li>
 							</ul>
 						</li>
 					</ul>

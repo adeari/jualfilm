@@ -31,6 +31,7 @@ import modelDatabase.supplier;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.hibernate.Session;
@@ -430,5 +431,77 @@ public class penjualanController {
         
         session.close();
         return returndata;
+    }
+    
+    @RequestMapping(value="penjualan/laporan", method = RequestMethod.GET)
+    public String laporanList(ModelMap model, HttpServletRequest req) {      
+        Session session = hibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(penjualan.class);
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        try {
+        	
+        	if (req.getParameter("from") != null && req.getParameter("to") != null) {
+        		Timestamp starDate = new Timestamp( df.parse(req.getParameter("from")+" 00:00:00").getTime() );
+        		Timestamp toDate = new Timestamp(df.parse(req.getParameter("to")+" 59:59:59").getTime());
+        		criteria.add(Restrictions.between("tanggal", starDate, toDate));
+        		model.addAttribute("startDate", req.getParameter("from"));
+        		model.addAttribute("endDate", req.getParameter("to"));
+        		System.out.println("date from tttt "+starDate+" == "+toDate);
+        	}
+        	
+        } catch (Exception ex) {
+        	System.out.println(" err dataLaporanList "+ex.getMessage());
+        }
+        
+        List<penjualan> lData = criteria.list();
+        List dataShow = new ArrayList();
+        df = new SimpleDateFormat("dd/MM/yyyy");
+        for (penjualan pj : lData) {
+           Map<String, String> modelHere = new HashMap<String, String>();
+           modelHere.put("no_faktur", pj.getNo_faktur());
+           modelHere.put("tanggal", df.format(pj.getTanggal()));
+           List<detail_penjualan> dps = pj.getPenjualan_detail();
+           int jumlah = 0;
+           for(detail_penjualan dp : dps) {
+        	   jumlah += dp.getJumlah();
+           }
+           modelHere.put("jumlah", String.valueOf(jumlah));
+           dataShow.add(modelHere);
+        }
+        model.addAttribute("dataList", dataShow);
+        session.close();
+        return "penjualanLaporan";
+    }
+    
+    @RequestMapping(value="penjualan/laporan/detail/{kode}", method = RequestMethod.GET)
+    public String laporanDetailList(ModelMap model, @PathVariable String kode) {
+    	SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+    	List dataShow = new ArrayList();
+    	Session session = hibernateUtil.getSessionFactory().openSession();
+    	String viewReturn = "redirect:/penjualan/laporan";
+    	Criteria criteria = session.createCriteria(penjualan.class);
+    	criteria.add(Restrictions.eq("no_faktur", kode));
+    	if (criteria.uniqueResult() != null) {
+    		penjualan pj = (penjualan) criteria.uniqueResult();
+    		model.addAttribute("tanggal", df.format(pj.getTanggal()));
+    		List<detail_penjualan> dpes = pj.getPenjualan_detail();
+    		int total = 0;
+    		for (detail_penjualan dpe : dpes) {
+    			 Map<String, Object> modelHere = new HashMap<String, Object>();
+    			 modelHere.put("kodeBarang", dpe.getKode_barang().getKode_barang());
+    			 modelHere.put("namaBarang", dpe.getKode_barang().getNama_barang());
+    			 modelHere.put("jumlah", dpe.getJumlah());
+    			 modelHere.put("harga", dpe.getHarga());
+    			 modelHere.put("diskon", dpe.getDiskon());
+    			 modelHere.put("total", dpe.getTotal());
+    			 total += dpe.getTotal();
+    			 dataShow.add(modelHere);
+			}
+    		model.addAttribute("total", total);
+    		model.addAttribute("dataList", dataShow);
+    		viewReturn = "penjualanLaporanDetail";
+    	}
+    	session.close();
+    	return viewReturn;
     }
 }

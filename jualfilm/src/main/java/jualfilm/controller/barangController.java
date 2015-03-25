@@ -5,28 +5,32 @@
 package jualfilm.controller;
 
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
 import modelDatabase.hibernateUtil;
+
 import javax.servlet.http.HttpServletRequest;
+
 import modelDatabase.barang;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import org.json.JSONObject;
-
 import org.hibernate.criterion.Order;
 /**
  *
@@ -207,5 +211,41 @@ public class barangController {
         model.addAttribute("dataList", criteria.list());
         session.close();
         return "barangLaporan";
+    }
+    @RequestMapping(value="barang/detail/{kode}", method = RequestMethod.GET)
+    public String laporanDetailList(ModelMap model, @PathVariable String kode) {
+    	String returnn = "redirect:/barang/laporan";
+    	Session session = hibernateUtil.getSessionFactory().openSession();
+    	Criteria criteria = session.createCriteria(barang.class);
+    	criteria.add(Restrictions.eq("kode_barang", kode));
+    	if (criteria.uniqueResult() != null) {
+	    	barang barang1 = (barang) criteria.uniqueResult();
+	    	model.addAttribute("barang", barang1);
+	    	returnn = "barangLaporanDetail";
+    	}
+    	
+    	String sql ="SELECT pu.no_po,de.jumlah, pu.tanggal "
+    			+ "from detail_purchase_order de join barang ba on de.id_barang = ba.id join purchase_order pu on de.no_po = pu.id "
+    			+ "where ba.kode_barang=:kodee "
+    			+ "union "
+    			+ "SELECT pe.no_faktur, de.jumlah, pe.tanggal "
+    			+ "from detail_penjualan de join barang ba on de.id_barang = ba.id join penjualan pe on de.no_faktur = pe.id "
+    			+ "where ba.kode_barang =:kodee";
+    	SQLQuery querydata =  (SQLQuery) session.createSQLQuery(sql).setString("kodee", kode);
+    	List<Object[]> ldata =  querydata.list();
+    	List dataShow = new ArrayList();
+    	for (Object[] obj : ldata) {
+    		Map modelldata = new HashMap();
+    		modelldata.put("kode_transaksi", obj[0].toString());
+    		System.out.println("   ooo "+obj[0].toString());
+    		modelldata.put("jumlah", obj[1]);
+    		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    		modelldata.put("tanggal", sdf.format(obj[2]).toString());
+    		dataShow.add(modelldata);
+    	}
+    	
+    	model.put("trxList", dataShow);
+    	session.close();
+    	return returnn;
     }
 }
