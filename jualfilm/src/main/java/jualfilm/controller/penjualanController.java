@@ -446,7 +446,6 @@ public class penjualanController {
         		criteria.add(Restrictions.between("tanggal", starDate, toDate));
         		model.addAttribute("startDate", req.getParameter("from"));
         		model.addAttribute("endDate", req.getParameter("to"));
-        		System.out.println("date from tttt "+starDate+" == "+toDate);
         	}
         	
         } catch (Exception ex) {

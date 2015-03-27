@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-03-24 06:19:13
+Date: 2015-03-28 05:19:47
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -70,14 +70,14 @@ CREATE TABLE `detail_purchase_order` (
   `jumlah` bigint(20) DEFAULT NULL,
   `id_barang` int(11) DEFAULT NULL,
   PRIMARY KEY (`kode_detail_po`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of detail_purchase_order
 -- ----------------------------
-INSERT INTO `detail_purchase_order` VALUES ('4', '2', 'bilanganitu', '67000', '5');
-INSERT INTO `detail_purchase_order` VALUES ('5', '3', 'bilanganitu', '4555', '5');
-INSERT INTO `detail_purchase_order` VALUES ('6', '3', 'Kuda', '6767', '3');
+INSERT INTO `detail_purchase_order` VALUES ('7', '2', 'bilanganitu', '67000', '5');
+INSERT INTO `detail_purchase_order` VALUES ('8', '3', 'Kuda', '6767', '3');
+INSERT INTO `detail_purchase_order` VALUES ('9', '3', 'bilanganitu', '4555', '5');
 
 -- ----------------------------
 -- Table structure for klaim_garansi
@@ -185,8 +185,8 @@ CREATE TABLE `purchase_order` (
 -- ----------------------------
 -- Records of purchase_order
 -- ----------------------------
-INSERT INTO `purchase_order` VALUES ('PO-0001', '2015-03-18 00:00:00', '2', '1', '2');
-INSERT INTO `purchase_order` VALUES ('PO-0003', '2015-03-18 00:00:00', '3', '3', '3');
+INSERT INTO `purchase_order` VALUES ('PO-0001', '2015-03-16 00:00:00', '2', '1', '2');
+INSERT INTO `purchase_order` VALUES ('PO-0003', '2015-03-24 00:00:00', '3', '3', '3');
 
 -- ----------------------------
 -- Table structure for retur_pembelian

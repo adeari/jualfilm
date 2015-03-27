@@ -47,10 +47,10 @@
 	<div class="col-xs-12">
 		<table class="table">
 			<colgroup>
-				<col width="100" />
-				<col width="100" />
-				<col width="100" />
-				<col width="50" />
+				<col width="25%" />
+				<col width="25%" />
+				<col width="25%" />
+				<col width="25%" />
 			</colgroup>
 			<thead>
 				<tr>

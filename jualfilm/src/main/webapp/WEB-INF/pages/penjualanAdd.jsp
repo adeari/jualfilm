@@ -47,9 +47,9 @@
 	<div class="col-xs-12">
 		<table class="table">
 			<colgroup>
-				<col width="100" />
-				<col width="100" />
-				<col width="40" />
+				<col width="210" />
+				<col width="220" />
+				<col width="70" />
 				<col width="40" />
 				<col width="40" />
 				<col width="40" />
