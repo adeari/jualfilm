@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-03-28 05:19:47
+Date: 2015-03-29 23:21:48
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -32,7 +32,7 @@ CREATE TABLE `barang` (
 -- ----------------------------
 -- Records of barang
 -- ----------------------------
-INSERT INTO `barang` VALUES ('br-01', 'perban', '45000', '4', '1');
+INSERT INTO `barang` VALUES ('br-01', 'perbanjj', '45000', '4', '1');
 INSERT INTO `barang` VALUES ('br-10', 'Jendela', '4500000', '23', '2');
 INSERT INTO `barang` VALUES ('br-11', 'Kuda', '4500', '2', '3');
 INSERT INTO `barang` VALUES ('Item-0005', 'bilanganitu', '45000', '23', '5');
@@ -136,7 +136,7 @@ CREATE TABLE `pelanggan` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unhu7878u` (`kode_pelanggan`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of pelanggan
@@ -148,6 +148,7 @@ INSERT INTO `pelanggan` VALUES ('ko-9455', 'milrom', 'alam rihum', '4545466', 'm
 INSERT INTO `pelanggan` VALUES ('emp-4545', 'rindonim lio', 'jl. polinom', '435456', '', '5');
 INSERT INTO `pelanggan` VALUES ('Emp-0006', 'rinda lina', 'milha', '093434', 'mio@yo.net', '6');
 INSERT INTO `pelanggan` VALUES ('Cust-0007', 'Lihanim', 'jiko jalan', '084545', 'moow@go.com', '7');
+INSERT INTO `pelanggan` VALUES ('Cust-0008', 'ddfd', 'dfdf', 'd3434', 'dfdfr@ssf.com', '8');
 
 -- ----------------------------
 -- Table structure for penjualan
