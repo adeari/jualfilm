@@ -1,3 +1,18 @@
+untuk aplikasi ini
+source code untuk netbeans di folder jualfilm 
+memakai maven jadi .jar akan ke download sendiri 
+
+source code untuk eclipse  ada di eclipse/jualfilm
+tidak memakai maven jadi udah ada .jar nya
+
+konfigurasi database ada di file
+hibernate.cfg.xml
+
+database mysql ada di folder "mysql" file "jualfilm.sql"
+
+database postgresql di folder "postgresqlheroku"
+
+
 # jualfilm
 ini dari pesenan wandy teman kerja d morra 
 
